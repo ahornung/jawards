@@ -1,0 +1,10 @@
+<?php
+$ja_config['introtext']='';
+$ja_config['number_medals']='15';
+$ja_config['number_users']='15';
+$ja_config['dateformat']='%Y-%m-%d';
+$ja_config['cbintegration']='0';
+$ja_config['showawardreason']='1';
+$ja_config['groupawards']='0';
+$ja_config['showcredits']='1';
+?>
