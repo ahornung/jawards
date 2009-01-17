@@ -9,7 +9,7 @@
 // ensure this file is being included by a parent file
 defined( '_VALID_MOS' ) or die( 'Direct Access to this location is not allowed.' );
 
-global $mainframe, $modConfig_absolute_path, $ja_config;
+global $mainframe, $mosConfig_absolute_path, $ja_config;
 
 require_once($mainframe->getPath('front_html'));
 require_once($mainframe->getPath('class'));
@@ -82,19 +82,20 @@ function view($Itemid, $option, $limit, $limitstart=0) {
 function listUsers($award, $option, $limit, $limitstart=0) {
 	global $database, $mainframe, $ja_config;
         
-        $grouping = $ja_config['groupawards'];
-        // get number of users for pagination:
-        $query = "SELECT COUNT(";
-        if ($grouping)
-            $query .= "DISTINCT ";
-        $query .="userid) FROM #__jawards_awards" 
-                    . "\n WHERE award = $award";
+    $grouping = $ja_config['groupawards'];
+    // get number of users for pagination:
+    $query = "SELECT COUNT(";
+    if ($grouping)
+        $query .= "DISTINCT ";
+    $query .="userid) FROM #__jawards_awards" 
+                . "\n WHERE award = $award";
         
 	$database->setQuery($query);
 	$total = $database->loadResult();
 
 	// Load the users:
-	$query = "SELECT ua.*,u.username, u.id AS userid";
+	$selname = ($ja_config['realname'])?"u.name as username":"u.username";
+	$query = "SELECT ua.*,$selname, u.id AS userid";
 	if ($grouping)
 		$query .=", COUNT(ua.userid) AS count";
 	$query .= " FROM #__jawards_awards as ua"
@@ -103,7 +104,7 @@ function listUsers($award, $option, $limit, $limitstart=0) {
 	if ($grouping)
 		$query .= "\n GROUP BY u.id";
 	
-	$query .= "\n ORDER BY u.username"
+	$query .= "\n ORDER BY username"
 		. " \n LIMIT $limitstart,$limit";
 		
 	$database->setQuery( $query );
