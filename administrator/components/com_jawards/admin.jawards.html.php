@@ -52,6 +52,11 @@ class HTML_awards {
          	<td align="left" valign="top"><?php echo _AWARDS_ADM_DATEFORMAT_EXPLANATION; ?></td>
       	</tr>
       	<tr align="center" valign="middle" class="row<?php $rowcount = ($rowcount+1)%2; echo $rowcount;?>">
+         	<td align="left" valign="top"><?php echo _AWARDS_ADM_REALNAME; ?></td>
+         	<td align="left" valign="top"><?php echo $lists['realname']; ?></td>
+         	<td align="left" valign="top"><?php echo _AWARDS_ADM_REALNAME_EXPLANATION; ?></td>
+      	</tr>      	
+      	<tr align="center" valign="middle" class="row<?php $rowcount = ($rowcount+1)%2; echo $rowcount;?>">
          	<td align="left" valign="top"><?php echo _AWARDS_ADM_CB_INTEGRATION; ?></td>
          	<td align="left" valign="top"><?php echo $lists['cbIntegration']; ?></td>
          	<td align="left" valign="top"><?php echo _AWARDS_ADM_CB_INTEGRATION_EXPLANATION; ?></td>

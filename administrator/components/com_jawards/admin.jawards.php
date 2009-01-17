@@ -14,13 +14,16 @@ if (!($acl->acl_check( 'administration', 'edit', 'users', $my->usertype, 'compon
 	mosRedirect( 'index2.php', _NOT_AUTH );
 }
 
+global $mosConfig_absolute_path, $ja_config;
 
 // Language:
 if (file_exists($mosConfig_absolute_path."/administrator/components/com_jawards/language/".$mosConfig_lang.".php"))
 	include_once($mosConfig_absolute_path."/administrator/components/com_jawards/language/".$mosConfig_lang.".php");
 else 
 	include_once($mosConfig_absolute_path."/administrator/components/com_jawards/language/english.php");
-	
+
+// config:	
+require_once($mosConfig_absolute_path."/administrator/components/com_jawards/config.jawards.php");
 
 require_once( $mainframe->getPath( 'admin_html' ) );
 require_once( $mainframe->getPath( 'class' ) );
@@ -136,7 +139,7 @@ switch ($task) {
 }
 
 function showConfig( $option ) {
-	include_once( "components/com_jawards/config.jawards.php" );
+	global $ja_config;
 	
 	$lists = array();	
 	// make a standard yes/no list
@@ -157,6 +160,7 @@ function showConfig( $option ) {
 	$lists['showawardReason'] = mosHTML::selectList( $yesno, 'cfg_showawardreason', 'class="inputbox" size="1"', 'value', 'text', $ja_config['showawardreason'] );
 	$lists['showcredits'] = mosHTML::selectList( $yesno, 'cfg_showcredits', 'class="inputbox" size="1"', 'value', 'text', $ja_config['showcredits'] );
 	$lists['cbIntegration'] = mosHTML::selectList( $yesno, 'cfg_cbintegration', 'class="inputbox" size="1"', 'value', 'text', $ja_config['cbintegration'] );
+	$lists['realname'] = mosHTML::selectList( $yesno, 'cfg_realname', 'class="inputbox" size="1"', 'value', 'text', $ja_config['realname'] );
 	$lists['groupawards'] = mosHTML::selectList( $yesno, 'cfg_groupawards', 'class="inputbox" size="1"', 'value', 'text', $ja_config['groupawards'] );
 	$lists['introtext'] = "<textarea class=\"inputbox\" cols=\"70\" rows=\"5\" name=\"cfg_introtext\">" .$ja_config['introtext'] ."</textarea>";
 	$lists['number_medals'] = "<input type=\"text\" size=\"3\" maxlength=\"3\" name=\"cfg_number_medals\" value=\"".$ja_config['number_medals'] ."\" />";
@@ -170,9 +174,10 @@ function showConfig( $option ) {
 
 
 function saveConfig ( $option ) {
+	global $mosConfig_absolute_path;
 	
    //Add code to check if config file is writeable.
-   $configfile = "components/com_jawards/config.jawards.php";
+   $configfile = $mosConfig_absolute_path."/administrator/components/com_jawards/config.jawards.php";
    @chmod ($configfile, 0766);
    if (!is_writable($configfile)) {
       mosRedirect("index2.php?option=$option", "FATAL ERROR: Config File  $configfile Not writeable" );
@@ -200,7 +205,7 @@ function saveConfig ( $option ) {
 }
 
 function viewAwards( $option, $sortby="date") {
-	global $database, $mainframe, $mosConfig_list_limit;
+	global $database, $mainframe, $mosConfig_list_limit, $ja_config;
 
 	$limit = $mainframe->getUserStateFromRequest( "viewlistlimit", 'limit', $mosConfig_list_limit );
 	$limitstart = $mainframe->getUserStateFromRequest( "view{$option}limitstart", 'limitstart', 0 );
@@ -209,15 +214,15 @@ function viewAwards( $option, $sortby="date") {
 	$search = $mainframe->getUserStateFromRequest( "search{$option}", 'search', '' );
     	$search = $database->getEscaped( trim( strtolower( $search ) ) );
     	
-    	// Input from medal filtering list:
-    	$medal_id = intval($mainframe->getUserStateFromRequest( "medals_filter", 'medals_filter', 0 ));
+    // Input from medal filtering list:
+    $medal_id = intval($mainframe->getUserStateFromRequest( "medals_filter", 'medals_filter', 0 ));
 
 	// get the total number of records:
 	$query = "SELECT COUNT(*)"
 	. "\n FROM #__jawards_awards AS a"
 	. "\n LEFT JOIN #__users AS u ON a.userid = u.id";
 	if ($search) {
-    		$query .= "\n WHERE LOWER(u.username) LIKE '%$search%' ";
+    	$query .= "\n WHERE (LOWER(u.username) LIKE '%$search%' OR LOWER(u.name) LIKE '%$search%')";
 		if ($medal_id)
 			$query .= "\n AND a.award = $medal_id";
 		
@@ -233,7 +238,7 @@ function viewAwards( $option, $sortby="date") {
 	
 	// Ordering the results:
 	switch ($sortby){
-		case "user":	$order = "u.username";
+		case "user":	$order = "username";
 				break;
 		
 		case "award":	$order = "m.name";
@@ -241,18 +246,18 @@ function viewAwards( $option, $sortby="date") {
 		
 		case "date":
 		default:	$order = "a.date DESC";
-		// u.username, m.name
 	}
 
 	// Constructing the main query:
-	$query = "SELECT a.*, m.image, m.name, u.username"
+	$selname = ($ja_config['realname'])?"u.name as username":"u.username as username";
+	$query = "SELECT a.*, m.image, m.name, $selname"
 	. "\n FROM #__jawards_awards AS a "
 	. "\n LEFT JOIN #__jawards_medals AS m ON a.award = m.id"
 	. "\n LEFT JOIN #__users AS u ON a.userid = u.id";
 	
 	// A username is searched for in the input field:
 	if ($search) {
-    		$query .= "\n WHERE LOWER(u.username) LIKE '%$search%' ";
+    		$query .= "\n WHERE (LOWER(u.username) LIKE '%$search%' OR LOWER(u.name) LIKE '%$search%')";
 		if ($medal_id)
 			$query .= "\n AND a.award = $medal_id";
 	}
@@ -300,7 +305,7 @@ function removeAward( $cid ) {
 }
 
 function editAward( $awardid, $option, $showallusers=false ) {
-	global $database, $my;
+	global $database, $my, $ja_config;
 	mosCommonHTML::loadOverlib();
 	$lists = array();
 
@@ -308,9 +313,10 @@ function editAward( $awardid, $option, $showallusers=false ) {
 	$row->load( $awardid );
 	
 	// Build User select list
-	$sql	= "SELECT id as value,username as text"
+	$selname = ($ja_config['realname'])?"name":"username";
+	$sql	= "SELECT id as value,$selname as text"
 	. "\n FROM #__users"
-	. "\n ORDER BY username";
+	. "\n ORDER BY $selname";
 
 	$database->setQuery($sql);
 	if (!$database->query()) {
@@ -360,15 +366,16 @@ function editAward( $awardid, $option, $showallusers=false ) {
   	HTML_awards::awardForm( $row, $lists, $option, $showallusers );
 }
 function massAward($option){
-	global $database;
+	global $database, $ja_config;
 	mosCommonHTML::loadOverlib();
 	
 	$lists = array();
 	
 	// Build User select list
-	$sql	= "SELECT id as value,username as text"
+	$selname = ($ja_config['realname'])?"name":"username";
+	$sql	= "SELECT id as value,$selname as text"
 	. "\n FROM #__users"
-	. "\n ORDER BY username";
+	. "\n ORDER BY $selname";
 
 	$database->setQuery($sql);
 	if (!$database->query()) {
