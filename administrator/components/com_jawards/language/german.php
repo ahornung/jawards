@@ -1,10 +1,11 @@
 <?php
 
 /*****************************************
-* English language file for jAwards
+* German language file for jAwards
 *
 * Author: Armin Hornung
 ******************************************/
+
 
 // Frontend Language constants:
 DEFINE ('_AWARDS_HEADING', 'Medallien-&Uuml;bersicht');
@@ -64,7 +65,7 @@ DEFINE ('_AWARDS_ADM_NAME','Name');
 DEFINE ('_AWARDS_ADM_EDIT_MEDAL','Medaille bearbeiten');
 DEFINE ('_AWARDS_ADM_ERROR_ENTER_MEDALNAME','Bitte einen Namen f&uuml;r die Medaille angeben.');
 DEFINE ('_AWARDS_ADM_ERROR_SELECT_IMAGE','Bitte ein Bild als Medaille ausw&auml;hlen.');
-DEFINE ('_AWARDS_ADM_EDIT_MEDAL_EXPLANATION','Bitte sicherstellen, dass das Medaillen-Bild im Verzeichnis /images/medals/ der Joomla-Installation vorhanden ist, oder jetzt eines &uuml;ber den button "Upload" hochladen!');
+DEFINE ('_AWARDS_ADM_EDIT_MEDAL_EXPLANATION','Bitte sicherstellen, dass das Medaillen-Bild im Verzeichnis /images/medals/ der Joomla-Installation vorhanden ist, oder zur&uuml;ck gehen und zuerst eines hochladen!');
 DEFINE ('_AWARDS_ADM_DESCRIPTION','Beschreibung');
 DEFINE ('_AWARDS_ADM_ERROR_ENTER_FILE','Bitte eine Datei zum Hochladen angeben!');
 DEFINE ('_AWARDS_ADM_ERROR_WRONG_EXTENSION','Nur JPEG, GIF oder PNG Dateien sind g&uuml;ltige Dateiformate');
@@ -91,5 +92,9 @@ DEFINE ('_AWARDS_ADM_ADD','hinzuf&uuml;gen');
 DEFINE ('_AWARDS_ADM_REMOVE','entfernen');
 DEFINE ('_AWARDS_ADM_CREDITS','Abspann anzeigen');
 DEFINE ('_AWARDS_ADM_CREDITS_EXPLANATION','Zeigt im Frontend einen Link zur jAwards-Homepage');
+
+// new in 1.0
+DEFINE ('_AWARDS_ADM_REALNAME','Voller Name anstatt Nutzername');
+DEFINE ('_AWARDS_ADM_REALNAME_EXPLANATION','Soll der volle Name anstatt dem Nutzernamen in Frontend und Backend angezeigt werden?');
 ?>
 

@@ -62,13 +62,14 @@
 		  <filename>index.html</filename>
 		  <filename>language/english.php</filename>
 		  <filename>language/german.php</filename>
-                  <filename>language/french.php</filename>
-                  <filename>language/dutch.php</filename>
-                  <filename>language/index.html</filename>
-                  <filename>images/index.html</filename>
-                  <filename>images/license.txt</filename>
-                  <filename>images/medal_gold.png</filename>
-                  <filename>images/medal_silver.png</filename>
+          <filename>language/french.php</filename>
+          <filename>language/dutch.php</filename>
+          <filename>language/README.txt</filename>
+          <filename>language/index.html</filename>
+          <filename>images/index.html</filename>
+          <filename>images/license.txt</filename>
+          <filename>images/medal_gold.png</filename>
+          <filename>images/medal_silver.png</filename>
 	  </files>
 	  
    </administration>

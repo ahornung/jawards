@@ -78,9 +78,9 @@ DEFINE ('_AWARDS_ADM_NUMBERMEDALS_EXPLANATION','Aantal medailles zichtbaar op vo
 DEFINE ('_AWARDS_ADM_NUMBERUSERS','Default aantal gebruikers in lijst');
 DEFINE ('_AWARDS_ADM_NUMBERUSERS_EXPLANATION','Aantal gebruikers zichtbaar op voorpagina PER pagina. Meervoud van 5 is aangeraden om overeen te laten komen met de dropdown-list om het nummer te wijzigen.');
 
-// new in 0.9:
-// missing in this translation!
 /*
+// missing in this translation!
+// new in 0.9:
 DEFINE ('_AWARDS_ADM_ORDER','Order');
 DEFINE ('_AWARDS_ADM_REORDER','Reorder');
 DEFINE ('_AWARDS_ADM_DEFAULTREASON','Default reason for this medal');
@@ -94,5 +94,9 @@ DEFINE ('_AWARDS_ADM_ADD','add');
 DEFINE ('_AWARDS_ADM_REMOVE','remove');
 DEFINE ('_AWARDS_ADM_CREDITS','Show Credits');
 DEFINE ('_AWARDS_ADM_CREDITS_EXPLANATION','Show Credits (link) in Frontend');
+
+// new in 1.0
+DEFINE ('_AWARDS_ADM_REALNAME','Real name instead of Username');
+DEFINE ('_AWARDS_ADM_REALNAME_EXPLANATION','Should the real name instead of the username be displayed in Frontend and Backend?');
 */
 ?>

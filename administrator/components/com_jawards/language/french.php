@@ -88,7 +88,7 @@ DEFINE ('_AWARDS_ADM_NAME','Nom');
 DEFINE ('_AWARDS_ADM_EDIT_MEDAL','&Eacute;dition des M&eacute;dailles');
 DEFINE ('_AWARDS_ADM_ERROR_ENTER_MEDALNAME','Veuillez donner un nom &agrave; la m&eacute;daille.');
 DEFINE ('_AWARDS_ADM_ERROR_SELECT_IMAGE','Veuillez s&eacute;lectionner une image.');
-DEFINE ('_AWARDS_ADM_EDIT_MEDAL_EXPLANATION','Assurez-vous que l\'image existe est qu\'elle se trouve bien dans le r&eacute;pertoire /images/medals/ de votre installation Joomla, ou t&eacute;l&eacute;chargez-la maintenant &grave; l\'aide du bouton "Upload"!');
+DEFINE ('_AWARDS_ADM_EDIT_MEDAL_EXPLANATION','Assurez-vous que l\'image existe est qu\'elle se trouve bien dans le r&eacute;pertoire /images/medals/ de votre installation Joomla, ou t&eacute;l&eacute;chargez-la maintenant &agrave; l\'aide du bouton "Upload" (&agrave; la page pr&eacute;c&eacute;dente)!');
 DEFINE ('_AWARDS_ADM_DESCRIPTION','Description');
 DEFINE ('_AWARDS_ADM_ERROR_ENTER_FILE','Vous avez oubli&eacute; d\'indiquer le nom du fichier !');
 DEFINE ('_AWARDS_ADM_ERROR_WRONG_EXTENSION','Formats autoris&eacute;s: JPEG, GIF ou PNG uniquement');
@@ -107,7 +107,7 @@ DEFINE ('_AWARDS_ADM_ORDER','Ordre');
 DEFINE ('_AWARDS_ADM_REORDER','Trier');
 DEFINE ('_AWARDS_ADM_DEFAULTREASON','Motif d\'attribution par d&eacute;faut');
 DEFINE ('_AWARDS_ADM_DATEFORMAT','Format de la date en admin');
-DEFINE ('_AWARDS_ADM_DATEFORMAT_EXPLANATION','Formatage de la date en admin. Dépend aussi de la config Heure Locale de Joomla! ou du serveur.');
+DEFINE ('_AWARDS_ADM_DATEFORMAT_EXPLANATION','Formatage de la date en admin. D&eacute;pend aussi de la config Heure Locale de Joomla! ou du serveur.');
 DEFINE ('_AWARDS_ADM_DATE_EXPLANATION','Format ISO standard AAAA-MM-JJ. Vous pouvez choisir le format d\'affichage de la date en frontend dans la configuration de jAwards.');
 DEFINE ('_AWARDS_ADM_REASON_EXPLANATION','S\'affichera en frontend uniquement si vous l\'avez pr&eacute;cis&eacute; dans la configuration de jAwards. Le motif par d&eacute;faut sera pr&eacute;rempli pour chaque nouvelle m&eacute;daille si vous en avez indiqu&eacute; un');
 DEFINE ('_AWARDS_ADM_AVAILABLE_USERS','Utilisateurs disponibles');
@@ -116,4 +116,8 @@ DEFINE ('_AWARDS_ADM_ADD','additionner');
 DEFINE ('_AWARDS_ADM_REMOVE','revoquer');
 DEFINE ('_AWARDS_ADM_CREDITS','Affiche link');
 DEFINE ('_AWARDS_ADM_CREDITS_EXPLANATION','Affiche lien hypertexte en jAwards dans le Frontend');
+
+// new in 1.0
+DEFINE ('_AWARDS_ADM_REALNAME','Nom r&eacute;el au lieu de Username');
+//DEFINE ('_AWARDS_ADM_REALNAME_EXPLANATION','Should the real name instead of the username be displayed in Frontend and Backend?'); //translation missing
 ?>

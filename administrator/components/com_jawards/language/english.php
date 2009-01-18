@@ -4,6 +4,7 @@
 * English language file for jAwards
 *
 * Author: Armin Hornung
+* mail@arminhornung.de
 ******************************************/
 
 
@@ -65,7 +66,7 @@ DEFINE ('_AWARDS_ADM_NAME','Name');
 DEFINE ('_AWARDS_ADM_EDIT_MEDAL','Edit Medal');
 DEFINE ('_AWARDS_ADM_ERROR_ENTER_MEDALNAME','Please fill in the name of your medal.');
 DEFINE ('_AWARDS_ADM_ERROR_SELECT_IMAGE','Please select an image as medal.');
-DEFINE ('_AWARDS_ADM_EDIT_MEDAL_EXPLANATION','Make sure the medal images exists in the directory /images/medals/ of your Joomla-installation, or upload it now with the button "Upload"!');
+DEFINE ('_AWARDS_ADM_EDIT_MEDAL_EXPLANATION','Make sure the medal image you want exists in the directory /images/medals/ of your Joomla-installation, or go back and upload it first.');
 DEFINE ('_AWARDS_ADM_DESCRIPTION','Description');
 DEFINE ('_AWARDS_ADM_ERROR_ENTER_FILE','Please enter a filename to upload!');
 DEFINE ('_AWARDS_ADM_ERROR_WRONG_EXTENSION','Only JPEG, GIF or PNG images are valid uploads');
@@ -94,4 +95,7 @@ DEFINE ('_AWARDS_ADM_REMOVE','remove');
 DEFINE ('_AWARDS_ADM_CREDITS','Show credits');
 DEFINE ('_AWARDS_ADM_CREDITS_EXPLANATION','Show Credits (link to jAwards homepage) in Frontend');
 
+// new in 1.0
+DEFINE ('_AWARDS_ADM_REALNAME','Real name instead of Username');
+DEFINE ('_AWARDS_ADM_REALNAME_EXPLANATION','Should the real name instead of the username be displayed in Frontend and Backend?');
 ?>
