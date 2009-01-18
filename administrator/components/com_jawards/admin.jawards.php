@@ -141,6 +141,14 @@ switch ($task) {
 function showConfig( $option ) {
 	global $ja_config;
 	
+	$ja_config['number_medals'] = intval($ja_config['number_medals']);
+	$ja_config['number_users'] = intval($ja_config['number_users']);
+	if ($ja_config['number_medals'] < 1)
+		$ja_config['number_medals'] = 15;
+		
+	if ($ja_config['number_users'] < 1)
+		$ja_config['number_users'] = 15;
+	
 	$lists = array();	
 	// make a standard yes/no list
 	$yesno = array();

@@ -14,6 +14,25 @@ class HTML_awards {
 	function config(&$ja_config, &$lists, $option){
 		$rowcount = 0;
 		?>
+		<script language="javascript" type="text/javascript">
+		<!--
+  		function submitbutton(pressbutton) {
+    		var form = document.adminForm;
+    		if (pressbutton == 'cancel') {
+      			submitform(pressbutton);
+      			return;
+    		}
+		    
+    		try {
+    			document.adminForm.onsubmit();
+    		}
+    		catch(e){}
+      		<?php getEditorContents('editor1', 'cfg_introtext') ; ?>
+      		submitform(pressbutton);
+    	}
+		//-->
+		</script>
+
 		<form action="index2.php" method="post" name="adminForm">
 
 		<table class="adminheading">
@@ -33,7 +52,10 @@ class HTML_awards {
       	</tr>
 		<tr align="center" valign="middle" class="row<?php $rowcount = ($rowcount+1)%2; echo $rowcount;?>">
         	<td align="left" valign="top"><?php echo _AWARDS_ADM_INTROTEXT; ?></td>
-         	<td align="left" valign="top"><?php echo $lists['introtext']; ?></td>
+         	<td align="left" valign="top">
+      		<?php editorArea('editor1', $ja_config['introtext'] ,
+                 'cfg_introtext', '500', '200', '70', '10') ; ?>
+         	</td>
          	<td align="left" valign="top"><?php echo _AWARDS_ADM_INTROTEXT_EXPLANATION; ?></td>
       	</tr>
       	<tr align="center" valign="middle" class="row<?php $rowcount = ($rowcount+1)%2; echo $rowcount;?>">
@@ -598,7 +620,7 @@ class HTML_medals {
 		</table>
 
 		<input type="hidden" name="option" value="<?php echo $option; ?>">
-				<input type="hidden" name="task" value="listmedals">
+		<input type="hidden" name="task" value="listmedals">
 		<input type="hidden" name="boxchecked" value="0">
 		<input type="hidden" name="hidemainmenu" value="0">
 		</form>
@@ -695,6 +717,7 @@ class HTML_medals {
 			} else if (!getSelectedValue('adminForm','image')) {
 				alert( "<?php echo _AWARDS_ADM_ERROR_SELECT_IMAGE; ?>" );
 			} else {
+				<?php getEditorContents('editor1', 'desc_text') ; ?>
 				submitform( pressbutton );
 			}
 		}
@@ -731,8 +754,8 @@ class HTML_medals {
 			<?php echo _AWARDS_ADM_DESCRIPTION; ?>:
 			</td>
 			<td>
-			<textarea class="inputbox" cols="70" rows="5" name="desc_text"><?php echo 
-				$row->desc_text; ?></textarea>
+			<?php editorArea('editor1', $row->desc_text ,
+                 'desc_text', '500', '200', '70', '10') ; ?> 
 			</td>
 		</tr>
 		<tr>
