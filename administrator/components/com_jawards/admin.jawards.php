@@ -31,6 +31,8 @@ require_once( $mainframe->getPath( 'class' ) );
 $showallusers = mosGetParam($_REQUEST, 'showallusers', '');
 $cid = mosGetParam( $_REQUEST, 'cid', array(0) );
 $sortby = mosGetParam( $_REQUEST, 'sortby',"date");
+$task = mosGetParam($_REQUEST, 'task', null);
+
 define('JA_JABSPATH',$mainframe->getCfg( 'absolute_path' ));
 define('JA_MEDABSPATH',JA_JABSPATH.'/images/medals');
 
@@ -220,7 +222,7 @@ function viewAwards( $option, $sortby="date") {
 	
 	// Input from Search field:
 	$search = $mainframe->getUserStateFromRequest( "search{$option}", 'search', '' );
-    	$search = $database->getEscaped( trim( strtolower( $search ) ) );
+    $search = $database->getEscaped( trim( strtolower( $search ) ) );
     	
     // Input from medal filtering list:
     $medal_id = intval($mainframe->getUserStateFromRequest( "medals_filter", 'medals_filter', 0 ));
@@ -232,8 +234,7 @@ function viewAwards( $option, $sortby="date") {
 	if ($search) {
     	$query .= "\n WHERE (LOWER(u.username) LIKE '%$search%' OR LOWER(u.name) LIKE '%$search%')";
 		if ($medal_id)
-			$query .= "\n AND a.award = $medal_id";
-		
+			$query .= "\n AND a.award = $medal_id";	
 	}
 	else if ($medal_id)
 		$query .= "\n WHERE a.award = $medal_id";
@@ -320,23 +321,34 @@ function editAward( $awardid, $option, $showallusers=false ) {
 	$row = new mosAward($database);
 	$row->load( $awardid );
 	
-	// Build User select list
-	$selname = ($ja_config['realname'])?"name":"username";
-	$sql	= "SELECT id as value,$selname as text"
-	. "\n FROM #__users"
-	. "\n ORDER BY $selname";
-
-	$database->setQuery($sql);
-	if (!$database->query()) {
-		echo $database->stderr();
-		return;
+	// bind previous values:
+	$row->id = mosGetParam($_POST, 'id', $row->id);
+	$row->award = mosGetParam($_POST, 'award', $row->award);
+	$row->userid = mosGetParam($_POST, 'userid', $row->userid);
+	$row->reason = mosGetParam($_POST, 'reason', $row->reason);
+	$row->date = mosGetParam($_POST, 'date', $row->date);
+	$showallusers = mosGetParam($_POST, 'showallusers', $showallusers);
+	
+	
+	if ($showallusers){
+		// Build User select list
+		$selname = ($ja_config['realname'])?"name":"username";
+		$sql	= "SELECT id as value,$selname as text"
+		. "\n FROM #__users"
+		. "\n ORDER BY $selname";
+	
+		$database->setQuery($sql);
+		if (!$database->query()) {
+			echo $database->stderr();
+			return;
+		}
+		$userlist = array();
+		
+		$userslist[] 	= mosHTML::makeOption( '0', _AWARDS_ADM_SELECT_USER, 'value', 'text' );
+		$userslist 	= array_merge( $userslist, $database->loadObjectList() );
+		$lists['users'] = mosHTML::selectList( $userslist, 'userlist', 'class="inputbox" size="1" onChange="javascript:document.adminForm.userid.value=document.adminForm.userlist.value;"','value', 'text', $row->userid);
 	}
 	
-	$userlist = array();
-	$userslist[] 	= mosHTML::makeOption( '0', _AWARDS_ADM_SELECT_USER, 'value', 'text' );
-	$userslist 	= array_merge( $userslist, $database->loadObjectList() );
-	$lists['users'] = mosHTML::selectList( $userslist, 'userlist', 'class="inputbox" size="1" onChange="javascript:document.adminForm.userid.value=document.adminForm.userlist.value;"','value', 'text', $row->userid);
-
 	// Build Medal select list
 	$sql	= "SELECT id,name"
 	. "\n FROM #__jawards_medals"

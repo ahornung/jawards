@@ -250,7 +250,7 @@ class HTML_awards {
 			<th>
 			<?php echo _AWARDS_AWARD; ?>
 			<small>
-			<?php echo $_row->userid ? _AWARDS_ADM_EDIT : _AWARDS_ADM_NEW ;?>
+			<?php echo $_row->id ? _AWARDS_ADM_EDIT : _AWARDS_ADM_NEW ;?>
 			</small>
 			</th>
 		</tr>
@@ -278,7 +278,7 @@ class HTML_awards {
 				 else{
 				 	?>
 				 		<input class="inputbox" type="text" name="userid" size="5" maxlength="10" valign="top" value="<?php echo $_row->userid; ?>">
-				 		<a href="index2.php?option=com_jawards&amp;task=new&amp;showallusers=true"><?php echo _AWARDS_ADM_SHOW_USERS; ?></a>
+				 		<a href="#" onclick="document.adminForm.showallusers.value='true';document.adminForm.submit();"><?php echo _AWARDS_ADM_SHOW_USERS; ?></a>
 				 	<?php
 				 	
 				 }
@@ -321,8 +321,9 @@ class HTML_awards {
 		</table>
 
 		<input type="hidden" name="option" value="<?php echo $_option; ?>">
+		<input type="hidden" name="task" value="<?php echo ($_row->id) ?"editA" : "new" ;?>" />
+		<input type="hidden" name="showallusers" value="<?php echo $showallusers; ?>">
 		<input type="hidden" name="id" value="<?php echo $_row->id; ?>">
-		<input type="hidden" name="task" value="">
 		</form>
 <?php
 	}
