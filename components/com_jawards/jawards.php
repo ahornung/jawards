@@ -75,7 +75,7 @@ function view($Itemid, $option, $limit, $limitstart=0) {
 	$database->setQuery($query);
 	$menuItem = $database->loadObjectList();
 
-        $pageNav = new mosPageNav($total, $limitstart, $limit);
+    $pageNav = new mosPageNav($total, $limitstart, $limit);
 	HTML_jAwards::displayAwards($rows, $menuItem[0], $option, $pageNav);
 }
 
