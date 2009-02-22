@@ -8,6 +8,8 @@
 
 defined( '_VALID_MOS' ) or die( 'Direct Access to this location is not allowed.' );
 
+define('_JAWARDS_VERSION', "0.91");
+
 class jAwardsInterface{
 	var $_itemId = NULL;
 
@@ -198,6 +200,20 @@ class jAwardsInterface{
 			$this->_itemId = $Itemid;
 		}
 		return $this->_itemId;
+	}
+	
+	/**
+	 * Returns the version of jAwards. Can also be called statically,
+	 * i.e. jAwardsInterface::getVersion().
+	 * 
+	 * This fct. can be used to obtain some information about the 
+	 * available features of the interface, because there might be 
+	 * some more added later.
+	 * 
+	 * @return string Version info
+	 */
+	function getVersion(){
+		return _JAWARDS_VERSION;
 	}
 }
 
