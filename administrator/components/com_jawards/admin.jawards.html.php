@@ -83,6 +83,11 @@ class HTML_awards {
          	<td align="left" valign="top"><?php echo $lists['cbIntegration']; ?></td>
          	<td align="left" valign="top"><?php echo _AWARDS_ADM_CB_INTEGRATION_EXPLANATION; ?></td>
       	</tr>
+      	<tr align="center" valign="middle" class="row<?php $rowcount = ($rowcount+1)%2; echo $rowcount;?>">
+         	<td align="left" valign="top"><?php echo _AWARDS_ADM_EMAIL_USERS; ?></td>
+         	<td align="left" valign="top"><?php echo $lists['emailUsers']; ?></td>
+         	<td align="left" valign="top"><?php echo _AWARDS_ADM_EMAIL_USERS_EXPLANATION; ?></td>
+      	</tr>
         <tr align="center" valign="middle" class="row<?php $rowcount = ($rowcount+1)%2; echo $rowcount;?>">
          	<td align="left" valign="top"><?php echo _AWARDS_ADM_SHOWREASON; ?></td>
          	<td align="left" valign="top"><?php echo $lists['showawardReason']; ?></td>

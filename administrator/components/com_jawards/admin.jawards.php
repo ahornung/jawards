@@ -170,6 +170,7 @@ function showConfig( $option ) {
 	$lists['showawardReason'] = mosHTML::selectList( $yesno, 'cfg_showawardreason', 'class="inputbox" size="1"', 'value', 'text', $ja_config['showawardreason'] );
 	$lists['showcredits'] = mosHTML::selectList( $yesno, 'cfg_showcredits', 'class="inputbox" size="1"', 'value', 'text', $ja_config['showcredits'] );
 	$lists['cbIntegration'] = mosHTML::selectList( $yesno, 'cfg_cbintegration', 'class="inputbox" size="1"', 'value', 'text', $ja_config['cbintegration'] );
+	$lists['emailUsers'] = mosHTML::selectList( $yesno, 'cfg_emailusers', 'class="inputbox" size="1"', 'value', 'text', $ja_config['emailusers'] );
 	$lists['realname'] = mosHTML::selectList( $yesno, 'cfg_realname', 'class="inputbox" size="1"', 'value', 'text', $ja_config['realname'] );
 	$lists['groupawards'] = mosHTML::selectList( $yesno, 'cfg_groupawards', 'class="inputbox" size="1"', 'value', 'text', $ja_config['groupawards'] );
 	$lists['introtext'] = "<textarea class=\"inputbox\" cols=\"70\" rows=\"5\" name=\"cfg_introtext\">" .$ja_config['introtext'] ."</textarea>";
@@ -451,7 +452,8 @@ function massAward($option){
 
 
 function saveMassAward( $task ) {
-	global $database;
+	global $database, $ja_config,$mosConfig_mailfrom,$mosConfig_fromname,
+		$mosConfig_live_site, $mosConfig_sitename;
 
 	$userids = mosGetParam($_POST, 'seluserlist', array());
 	$awardid = intval(mosGetParam($_POST, 'award', ''));
@@ -477,12 +479,28 @@ function saveMassAward( $task ) {
 		echo $database->stderr();
 		return;
 	}
+	/// send out email
+	if ($ja_config['emailusers']){
+		$database->setQuery("SELECT name FROM #__jawards_medals WHERE id = $awardid");
+		$awardname = $database->loadResult();
+		set_time_limit(900);
+		for($i=0; $i< $numusers; $i++){
+			$userid = intval($userids[$i]);
+			$user = new mosUser($database);
+			$user->load($userid);
+		
+			$subject = _AWARDS_EMAIL_SUBJECT;
+			$text = sprintf(_AWARDS_EMAIL_TEXT, $user->name, $awardname, $mosConfig_live_site,$mosConfig_sitename);
+			mosMail($mosConfig_mailfrom,$mosConfig_fromname,$user->email,$subject,$text);  
+		}
+	}
 		
   	mosRedirect( 'index2.php?option=com_jawards', $msg );
 }
 
 function saveAward( $task ) {
-	global $database;
+	global $database, $ja_config,$mosConfig_mailfrom,$mosConfig_fromname,
+		$mosConfig_live_site, $mosConfig_sitename;
 
 	$row = new mosAward($database);
 
@@ -492,6 +510,9 @@ function saveAward( $task ) {
 		echo "<script> alert('".$row->getError()."'); window.history.go(-1); </script>\n";
 		exit();
 	}
+	if(intval($row->id) == 0 && $ja_config['emailusers']){ // new award
+		$sendEmail = true;
+	}
 	if (!$row->check()) {
 		echo "<script> alert('".$row->getError()."'); window.history.go(-1); </script>\n";
 		exit();
@@ -499,6 +520,18 @@ function saveAward( $task ) {
 	if (!$row->store()) {
 		echo "<script> alert('".$row->getError()."'); window.history.go(-1); </script>\n";
 		exit();
+	}
+	// send out email
+	if ($sendEmail){
+		$user = new mosUser($database);
+		$user->load($row->userid);
+		
+		$database->setQuery("SELECT name FROM #__jawards_medals WHERE id = ".intval($row->award));
+		$awardname = $database->loadResult();
+		
+		$subject = _AWARDS_EMAIL_SUBJECT;
+		$text = sprintf(_AWARDS_EMAIL_TEXT, $user->name, $awardname, $mosConfig_live_site,$mosConfig_sitename);
+		mosMail($mosConfig_mailfrom,$mosConfig_fromname,$user->email,$subject,$text);  
 	}
 	mosRedirect( 'index2.php?option=com_jawards', $msg );
 }
@@ -654,7 +687,7 @@ function uploadFile ( $option ) {
       		}
     		else  {
 			move_uploaded_file($_FILES["medal_file"]["tmp_name"], $upload_path);
-			@chmod ($upload_path, 0777);
+			@chmod ($upload_path, 0755);
 			mosRedirect( "index2.php?option=$option&amp;task=showconfig&amp;task=listmedals", "Successfully uploaded. ");
       		}
 

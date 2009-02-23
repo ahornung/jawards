@@ -98,4 +98,8 @@ DEFINE ('_AWARDS_ADM_CREDITS_EXPLANATION','Show Credits (link to jAwards homepag
 // new in 1.0
 DEFINE ('_AWARDS_ADM_REALNAME','Real name instead of Username');
 DEFINE ('_AWARDS_ADM_REALNAME_EXPLANATION','Should the real name instead of the username be displayed in Frontend and Backend?');
+DEFINE ('_AWARDS_ADM_EMAIL_USERS','Email awarded users');
+DEFINE ('_AWARDS_ADM_EMAIL_USERS_EXPLANATION','Should newly awarded users be notified by email?');
+DEFINE ('_AWARDS_EMAIL_SUBJECT','Award notification');
+DEFINE ('_AWARDS_EMAIL_TEXT','Congratulations %s!\r\n\r\nYou have just been awarded "%s" at %s.\r\n\r\nBest regards,\r\n%s Staff');
 ?>
