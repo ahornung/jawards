@@ -8,13 +8,16 @@
 
 defined( '_VALID_MOS' ) or die( 'Direct Access to this location is not allowed.' );
 
-define('_JAWARDS_VERSION', "0.91");
+define('_JAWARDS_VERSION', "1.0 beta 1");
 
 class jAwardsInterface{
 	var $_itemId = NULL;
+	var $_ja_config;
 
 	function jAwardsInterface(){
-
+		global $ja_config, $mosConfig_absolute_path;
+		require($mosConfig_absolute_path."/administrator/components/com_jawards/config.jawards.php");
+		$this->_ja_config = $ja_config;
 	}
 
 	/**
@@ -88,7 +91,7 @@ class jAwardsInterface{
 	}
 	
 	/**
-	 * Deletes all awards of id $medalId from user with ID $userId
+	 * Deletes all awards of id $medalId from user with ID $userId IRREVOCABLY!
 	 * 
 	 * @param $userId integer ID of user
 	 * @param $medalId integer ID of medal
@@ -101,7 +104,7 @@ class jAwardsInterface{
 		
 		$query = "DELETE FROM #__jawards_awards
 					WHERE userid = $userId
-					AND awards = $medalId";
+					AND award = $medalId";
 		
 		$database->setQuery($query);
     	if (!$database->query()) {
@@ -112,7 +115,8 @@ class jAwardsInterface{
 	}
 	
 	/**
-	 * Deletes a medal
+	 * Deletes a medal completely and IRREVOCABLY, including all awards of that type
+	 * handed out to users. 
 	 * 
 	 * @param $medalId integer ID of medal
 	 * @return bool success
@@ -121,19 +125,29 @@ class jAwardsInterface{
 		global $database;
 		$medalId = intval($medalId);
 		
+		$query = "DELETE FROM #__jawards_awards
+					WHERE award = $medalId";
+		
+		$database->setQuery($query);
+    	if (!$database->query()) {
+      		return false;
+    	}
+		
 		$query = "DELETE FROM #__jawards_medals
 					WHERE id = $medalId";
 		
 		$database->setQuery($query);
     	if (!$database->query()) {
-      		echo "<script> alert('".$database->getErrorMsg()."'); </script>n";
       		return false;
     	}
 		return true;
 	}
 	
 	/**
-	 * Returns the number of awards of a user (e.g. for pagination)
+	 * Returns the number of awards of a user (e.g. for pagination).
+	 * When "grouping" is enabled in the jAwards-Config, only distinct
+	 * medals are counted
+	 * 
 	 * @param $userId integer ID of user
 	 * @return integer
 	 */
@@ -141,8 +155,11 @@ class jAwardsInterface{
 		global $database;
 		$userId = intval($userId);
 		
-		// TODO: grouping
-		$query = "SELECT count (id) FROM #__jawards_awards WHERE userid = $userId";
+		if ($this->_ja_config['groupawards'])
+			$query = "SELECT COUNT(DISTINCT award) FROM #__jawards_awards WHERE userid = $userId";
+		else
+			$query = "SELECT COUNT(id) FROM #__jawards_awards WHERE userid = $userId";
+		
 		$database->setQuery($query);
     	if (!$database->query()) {
       		echo "<script> alert('".$database->getErrorMsg()."'); </script>n";
@@ -160,7 +177,7 @@ class jAwardsInterface{
 	 * @param $limitStart string where to start (pagination)
 	 * @return db-rows
 	 */
-	function getAwardsUser($userId, $sorting, $numRows = NULL, $limitStart = 0){
+	function getAwardsUser($userId, $sorting="a.date DESC", $numRows = NULL, $limitStart = 0){
 		global $database;
 	    // validation:
     	$userId = intval($userId);
@@ -173,9 +190,28 @@ class jAwardsInterface{
       		$limit = "\n LIMIT ".$limitStart.",".$numRows;
     	}
     	
-    	// TODO: query..
+    	$query = "SELECT *";
     	
-    	return false;
+		if ($this->_ja_config['groupawards'])
+			$query .=", COUNT(a.id) AS count";
+			
+		$query .= "\n FROM #__jawards_awards AS a
+					LEFT JOIN #__jawards_medals AS b ON b.id = a.award
+					WHERE a.userid=". $userId;
+		
+		if ($this->_ja_config['groupawards'])
+			$query .= "\n GROUP BY award";
+			
+		$query .= "\n ORDER BY $sorting
+					$limit";
+				
+
+		$database->setQuery( $query );
+		if (!$database->query()) {
+      		echo "<script> alert('".$database->getErrorMsg()."'); </script>n";
+      		exit();
+    	}
+		return $database->loadObjectList();
 	}
 
 	/**
@@ -201,6 +237,7 @@ class jAwardsInterface{
 		}
 		return $this->_itemId;
 	}
+	
 	
 	/**
 	 * Returns the version of jAwards. Can also be called statically,
