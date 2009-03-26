@@ -42,15 +42,15 @@ class jAwardsInterface{
 		$database->setQuery($query);
     	if (!$database->query()) {
       		echo "<script> alert('".$database->getErrorMsg()."'); </script>n";
-      		return false;
+      		return 0;
     	}
     	
     	$query = "SELECT id FROM #__jawards_medals WHERE
-    			name = $name AND
-				image = $image AND
-				desc_text = $description AND
-				default_reason = $defaultReason";
-		
+    			name = '$name' AND
+				image = '$image' AND
+				desc_text = '$description' AND
+				default_reason = '$defaultReason'";
+		$database->setQuery($query);
 		return $database->loadResult(); 
 	}
 	
@@ -60,28 +60,31 @@ class jAwardsInterface{
 	 * @param $userId integer ID of user
 	 * @param $medalId integer ID of medal
 	 * @param $date string date (empty string, default: current)
-	 * @param $reason string reason for medal (empty string, default: use def. reason from medal
+	 * @param $reason string reason for medal (default NULL: use def. reason from medal)
 	 * @return bool success
 	 */
-	function addAward($userId, $medalId, $date = "", $reason = ""){
+	function addAward($userId, $medalId, $date = "", $reason = NULL){
 		global $database;
 		$userId = intval($userId);
 		$medalId = intval($medalId);
-		$date = $database->getEscaped($date);
-		$reason = $database->getEscaped($reason);
 		
-		if ($date = ""){
+		if ($date == ""){
 			$date = date( 'Y-m-d' );
+		} else{
+			$date = $database->getEscaped($date);
 		}
 		
-		if ($reason == ""){ // use default
+		if (is_null($reason)){ // use default
 			$query = "SELECT default_reason FROM #__jawards_medals WHERE id = $medalId";
+			$database->setQuery($query);
 			$reason = $database->loadResult(); 
+		}else{
+			$reason = $database->getEscaped($reason);
 		}
 		
-		$query = "INSERT INTO #__jawards_medals 
+		$query = "INSERT INTO #__jawards_awards 
 					(userid, award, date, reason)
-					VALUES ($userId, $medalId, $date, $reason)";
+					VALUES ($userId, $medalId, '$date', '$reason')";
 		$database->setQuery($query);
     	if (!$database->query()) {
       		echo "<script> alert('".$database->getErrorMsg()."'); </script>n";
