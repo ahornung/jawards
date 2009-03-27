@@ -2,7 +2,7 @@
 /*************************************************************
  * JAwards - The Joomla Awards Component
  * Author: Armin Hornung @  www.arminhornung.de
- * Released under GNU/GPL License :
+ * Released under GNU/GPL License:
  * http://www.gnu.org/copyleft/gpl.html
  *************************************************************/
 
@@ -10,6 +10,12 @@ defined( '_VALID_MOS' ) or die( 'Direct Access to this location is not allowed.'
 
 define('_JAWARDS_VERSION', "1.0 beta 1");
 
+/**
+ * Interface (API) to jAwards.
+ * 
+ * Create an interface object like "$interface = new jAwardsInterface();"
+ * and you can access jAwards like "$interface->getNumAwardsUser($user_id);"
+ */
 class jAwardsInterface{
 	var $_itemId = NULL;
 	var $_ja_config;
