@@ -9,6 +9,9 @@
 // no direct access
 defined( '_VALID_MOS' ) or die( 'Restricted access' );
 
+global $mosConfig_absolute_path;
+include_once($mosConfig_absolute_path."/components/com_jawards/jawards.interface.php");
+
 class HTML_awards {
 	
 	function config(&$ja_config, &$lists, $option){
@@ -809,14 +812,13 @@ class HTML_medals {
 	}
 }
 function createFooter(){
-		global $mosConfig_live_site, $ja_config;
-		
+	global $mosConfig_live_site;	
 	 
 ?>
 	<div style="padding:10px;text-align:center">Powered by 
-		<a href="http://www.arminhornung.de/index.php?section=Joomla&amp;file=jAwards&amp;l=en" target="_blank">
+		<a href="http://www.arminhornung.de/Joomla/jAwards_en.html" target="_blank">
 			<img style="border:0px;vertical-align:middle;" src="<?php echo $mosConfig_live_site;?>/administrator/components/com_jawards/images/medal_gold.png"/>jAwards
-		</a> v0.9
+		</a> <?php echo jAwardsInterface::getVersion(); ?>
 	</div>
 <?php	
 	

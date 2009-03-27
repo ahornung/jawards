@@ -2,12 +2,12 @@
 <mosinstall type="component" version="1.0.0">
   <name>jAwards</name>
   <author>Armin Hornung</author>
-  <creationDate>June 2008</creationDate>
-  <copyright>(C) 2008 Armin Hornung</copyright>
+  <creationDate>March 2009</creationDate>
+  <copyright>(C) 2009 Armin Hornung</copyright>
   <license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
   <authorEmail>mail[at] arminhornung[dot] de</authorEmail>
-  <authorUrl>http://www.arminhornung.de/index.php?section=Joomla&amp;file=jAwards&amp;l=en</authorUrl>
-  <version>0.9</version>
+  <authorUrl>http://www.arminhornung.de/Joomla/jAwards_en.html</authorUrl>
+  <version>1.0 beta 1</version>
   <description>This component manages medals and lets you hand out awards to your users. For more information, Readme and Changelog see the project homepage at the Joomla-Forge!</description>
   <params />
   <files>
