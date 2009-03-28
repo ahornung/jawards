@@ -143,7 +143,7 @@ class HTML_jAwards {
 		if ($ja_config['showcredits']){ 
 ?>
 	<div class="ja_footer">Powered by 
-		<a href="http://www.arminhornung.de/index.php?section=Joomla&amp;file=jAwards&amp;l=en" target="_blank">
+		<a href="http://www.arminhornung.de/Joomla/jAwards_en.html" target="_blank">
 			<img src="<?php echo $mosConfig_live_site;?>/administrator/components/com_jawards/images/medal_gold.png"/>jAwards
 		</a>
 	</div>
