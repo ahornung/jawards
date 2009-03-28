@@ -98,8 +98,8 @@ DEFINE ('_AWARDS_ADM_REALNAME','Voller Name anstatt Nutzername');
 DEFINE ('_AWARDS_ADM_REALNAME_EXPLANATION','Soll der volle Name anstatt dem Nutzernamen in Frontend und Backend angezeigt werden?');
 DEFINE ('_AWARDS_ADM_EMAIL_USERS','Nutzer bei Auszeichnung benachrichtigen');
 DEFINE ('_AWARDS_ADM_EMAIL_USERS_EXPLANATION','Sollen neu ausgezeichnete Nutzer per Email benachrichtigt werden?');
-DEFINE ('_AWARDS_EMAIL_SUBJECT','Benachrichtigung &uuml;ber eine Auszeichnung');
-DEFINE ('_AWARDS_EMAIL_TEXT','Gl&uuml;ckwunsch %s!\r\n\r\nDu wurdest soeben mit der Auszeichnung "%s" auf %s ausgezeichnet.\r\n\r\nMit freundlichen Gr&uuml;&szlig;en,\r\nDas %s Team');
+DEFINE ('_AWARDS_EMAIL_SUBJECT',"Benachrichtigung &uuml;ber eine Auszeichnung");
+DEFINE ('_AWARDS_EMAIL_TEXT',"Gl&uuml;ckwunsch %s!\r\n\r\nDu wurdest soeben mit der Auszeichnung\r\n  \"%s\"\r\nauf %s ausgezeichnet.\r\n\r\nMit freundlichen Gr&uuml;&szlig;en,\r\nDas %s Team");
 DEFINE ('_AWARDS_TOTAL_NUMBER_AWARDS', 'Anzahl aller Auszeichnungen');
 ?>
 
