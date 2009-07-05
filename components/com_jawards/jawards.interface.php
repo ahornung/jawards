@@ -8,7 +8,7 @@
 
 defined( '_VALID_MOS' ) or die( 'Direct Access to this location is not allowed.' );
 
-define('_JAWARDS_VERSION', "1.0 beta 1");
+define('_JAWARDS_VERSION', "1.0");
 
 /**
  * Interface (API) to jAwards.
