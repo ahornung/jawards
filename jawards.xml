@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<install type="component" version="1.5.0">
+
+  <name>jAwards</name>
+  <author>Armin Hornung, Chris Lehr</author>
+  <creationDate>April 2010</creationDate>
+  <copyright>(C) 2009 Armin Hornung, (C) 2010 Chris Lehr</copyright>
+  <license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+  <authorEmail>mail [at] arminhornung [dot] de</authorEmail>
+  <authorUrl>http://www.arminhornung.de/Joomla/jAwards_en.html</authorUrl>
+  <version>1.1</version>
+  <description>This component manages medals and lets you hand out awards to your users. For more information, Readme and Changelog see the project homepage at the Joomlacode! jAwards was ported to Joomla 1.5 (native) by Cris Lehr.</description>
+  <params />
+  
+  <files folder="components/com_jawards">
+        <filename>jawards.class.php</filename>
+        <filename>jawards.php</filename>
+        <filename>jawards.html.php</filename>
+        <filename>jawards.interface.php</filename>
+        <filename>template.css</filename>
+        <filename>index.html</filename>
+  </files>
+ 
+  <languages folder="language/en-GB">
+	    <language tag="en-GB">en-GB.com_jawards.ini</language>
+  </languages>
+  
+<!-- TODO UNINSTALL -->
+
+	<install>
+		<sql folder="admin">
+			<file charset="utf8" driver="mysql">install.sql</file>
+		</sql>
+	</install>
+	
+  <installfile>install.php</installfile>
+  <administration>
+	  <menu img="/components/com_jawards/images/medal_gold.png">jAwards</menu>
+	  <submenu>
+		  <menu img="js/ThemeOffice/component.png" task="showconfig">Configuration</menu>
+		  <menu img="/components/com_jawards/images/medal_gold.png" task="listmedals">Medals Management</menu>
+		  <menu img="/components/com_jawards/images/medal_silver.png" task="">Awards Management</menu>
+	  </submenu> 
+	  <files>
+          <filename>jawards.xml</filename>
+		  <filename>install.sql</filename>
+      </files>
+	  <files folder="administrator/components/com_jawards">
+		  <filename>admin.jawards.php</filename>
+		  <filename>admin.jawards.html.php</filename>
+		  <filename>config.jawards.php</filename>
+		  <filename>toolbar.jawards.php</filename>
+		  <filename>toolbar.jawards.html.php</filename>
+		  <filename>index.html</filename>
+          <filename>images/index.html</filename>
+          <filename>images/license.txt</filename>
+		  <filename>images/medal_gold.png</filename>
+		  <filename>images/medal_silver.png</filename>
+	  </files>
+	  <languages folder="administrator/language/en-GB">
+	    <language tag="en-GB">en-GB.com_jawards.ini</language>
+      </languages>
+   </administration>
+</install>

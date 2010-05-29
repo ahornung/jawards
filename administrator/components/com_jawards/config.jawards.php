@@ -1,0 +1,12 @@
+<?php
+$jAwards_Config['introtext']='';
+$jAwards_Config['number_medals']='15';
+$jAwards_Config['number_users']='15';
+$jAwards_Config['dateformat']='%Y-%m-%d';
+$jAwards_Config['realname']='0';
+$jAwards_Config['cbintegration']='0';
+$jAwards_Config['emailusers']='0';
+$jAwards_Config['showawardreason']='1';
+$jAwards_Config['groupawards']='0';
+$jAwards_Config['showcredits']='1';
+?>
