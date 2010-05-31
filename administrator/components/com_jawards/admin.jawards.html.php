@@ -11,6 +11,8 @@
 defined('_JEXEC') or die('Restricted access');
 
 include_once(JPATH_SITE.DS."components/com_jawards/jawards.interface.php");
+jimport('joomla.html.html.grid');
+
 
 class HTML_awards {
 	
@@ -142,7 +144,7 @@ class HTML_awards {
 			<tr>
       		<td width="100%" class="sectionname"></td>
 		    <td nowrap="nowrap"><?php echo JText::_('AWARDS_ADM_DISPLAY'); ?> #<br>
-        		<?php echo $pageNav->writeLimitBox(); ?>
+        		<?php echo $pageNav->getLimitBox(); ?>
 	        </td>
 	        <td width="right" valign="bottom">
 			<?php
@@ -186,7 +188,7 @@ class HTML_awards {
 			?>
 			<tr class="<?php echo "row$k"; ?>">
 				<td align="center">
-				<?php echo $pageNav->rowNumber( $i ); ?>
+				<?php echo $pageNav->getRowOffset( $i ); ?>
 				</td>
 				<td align="center">
 					<?php 
@@ -213,11 +215,11 @@ class HTML_awards {
 		?>
 		<tr>
         <th align="center" colspan="5">
-          <?php echo $pageNav->writePagesLinks(); ?></th>
+          <?php echo $pageNav->getPagesLinks(); ?></th>
 	    </tr>
         <tr>
         <td align="center" colspan="5">
-          <?php echo $pageNav->writePagesCounter(); ?></td>
+          <?php echo $pageNav->getPagesCounter(); ?></td>
 	    </tr>
 		</table>
 		
@@ -553,7 +555,7 @@ class HTML_medals {
 			<tr>
 				<td width="100%" class="sectionname"></td>
 				<td nowrap="nowrap"><?php echo JText::_('AWARDS_ADM_DISPLAY'); ?> #<br>
-				<?php echo $pageNav->writeLimitBox(); ?>
+				<?php echo $pageNav->getLimitBox(); ?>
 				</td>
 		
 				<td><?php echo JText::_('AWARDS_ADM_FILTER_MEDAL'); ?>:<br>
@@ -568,7 +570,7 @@ class HTML_medals {
 			  <th width="20px">
 				<input type="checkbox" name="toggle" value="" onClick="checkAll(<?php echo count( $rows ); ?>);" />				</th>
 			  <th width="5%" colspan="2" align="center"><?php echo JText::_('AWARDS_ADM_REORDER'); ?></th>
-			  <th width="2%" style="white-space:nowrap;"><?php echo JText::_('AWARDS_ADM_ORDER'); ?> <a href="javascript: saveorder( <?php echo count($rows)-1; ?> )"><img src="images/filesave.png" border="0" width="16" height="16" alt="Save Order" /></a></th>
+			  <th width="2%" style="white-space:nowrap;"><?php echo JText::_('AWARDS_ADM_ORDER'); echo JHTML::_('grid.order', $rows, "filesave.png"); ?> </th>
 			  <th align="left" nowrap>
 				<?php echo JText::_('AWARDS_ADM_IMAGE'); ?>				</th>
 				
@@ -588,7 +590,7 @@ class HTML_medals {
 			?>
 			<tr class="<?php echo "row$k"; ?>">
 				<td align="center">
-				    <?php echo $pageNav->rowNumber( $i );?>
+				    <?php echo $pageNav->getRowOffset( $i );?>
 				</td>
 				<td align="center">
 				    <?php //echo mosHTML::idBox($i, $row->id); ?>
@@ -621,12 +623,12 @@ class HTML_medals {
 ?>
 			<tr>
 				<th align="center" colspan="7">
-					<?php echo $pageNav->writePagesLinks(); ?>
+					<?php echo $pageNav->getPagesLinks(); ?>
 				</th>
 			</tr>
 			<tr>
 				<td align="center" colspan="7">
-					<?php echo $pageNav->writePagesCounter(); ?>
+					<?php echo $pageNav->getPagesCounter(); ?>
 				</td>
 			</tr>
 		</table>
@@ -823,12 +825,11 @@ class HTML_medals {
 	}
 }
 function createFooter(){
-	global $mosConfig_live_site;	
 	 
 ?>
 	<div style="padding:10px;text-align:center">Powered by 
 		<a href="http://www.arminhornung.de/Joomla/jAwards_en.html" target="_blank">
-			<img style="border:0px;vertical-align:middle;" src="<?php echo $mosConfig_live_site;?>/administrator/components/com_jawards/images/medal_gold.png"/>jAwards
+			<img style="border:0px;vertical-align:middle;" src="<?php echo JUri::base(true);?>/administrator/components/com_jawards/images/medal_gold.png"/>jAwards
 		</a> <?php echo jAwardsInterface::getVersion(); ?>
 	</div>
 <?php	

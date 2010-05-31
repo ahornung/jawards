@@ -12,10 +12,10 @@ defined('_JEXEC') or die('Restricted access');
 
 class HTML_jAwards {
 	function displayAwards(&$rows, &$menuItem, &$option, &$pageNav) {
-		global $Itemid, $mosConfig_live_site, $mainframe, $mosConfig_lang, $jAwards_Config;
-	
+		global $Itemid, $jAwards_Config;
+		$mainframe = &JFactory::getApplication();
 		// include CSS template:
-		$template = '<link type="text/css" rel="stylesheet" href="' .  $mosConfig_live_site.'/components/com_jawards/template.css" />';
+		$template = '<link type="text/css" rel="stylesheet" href="' . JUri::base(true) .'/components/com_jawards/template.css" />';
 		$mainframe->addCustomHeadTag($template);
 
 		echo ("<div class=\"componentheading\">". JText::_('AWARDS_HEADING') ."</div>");
@@ -24,7 +24,7 @@ class HTML_jAwards {
                 ?>
                 <form action="index.php" id="medalsForm" name="medalsForm" method="post">
                     <div align="right">
-                            <?php echo JText::_('AWARDS_ADM_DISPLAY')."# "; echo $pageNav->writeLimitBox("index.php?option=$option&Itemid=$menuItem->id"); ?>
+                            <?php echo JText::_('AWARDS_ADM_DISPLAY')."# "; echo $pageNav->getLimitBox("index.php?option=$option&Itemid=$menuItem->id"); ?>
                     </div>
                     <input type="hidden" name="option" value="<?php echo $option ?>" />
                     <input type="hidden" name="limit" value="<?php echo $pageNav->limit;?>" />
@@ -50,8 +50,8 @@ class HTML_jAwards {
 		
 		?>
 		
-		<div align="center"><?php echo $pageNav->writePagesLinks("index.php?option=$option&Itemid=$menuItem->id"). "<br />";
-		                              echo $pageNav->writePagesCounter() ?></div>
+		<div align="center"><?php echo $pageNav->getPagesLinks("index.php?option=$option&Itemid=$menuItem->id"). "<br />";
+		                              echo $pageNav->getPagesCounter() ?></div>
 		
 		<?php
 
@@ -60,10 +60,10 @@ class HTML_jAwards {
 
 	function showUsers(&$rows, &$awardres, &$option, &$pageNav) {
 
-		global $Itemid, $mainframe, $mosConfig_live_site, $mosConfig_lang, $jAwards_Config;
-				
+		global $Itemid, $jAwards_Config;
+		$mainframe = &JFactory::getApplication();		
 		// include CSS template:
-		$template = '<link type="text/css" rel="stylesheet" href="' .  $mosConfig_live_site.'/components/com_jawards/template.css" />';
+		$template = '<link type="text/css" rel="stylesheet" href="' .  JUri::base(true).'/components/com_jawards/template.css" />';
 		$mainframe->addCustomHeadTag($template);
 		
 		echo "<div class=\"ja_award_details\"><img class=\"ja_medal\" src=\"images/medals/$awardres->image\"><h3> $awardres->name</h3>";
@@ -79,7 +79,7 @@ class HTML_jAwards {
 			?>
 			<form action="index.php" id="medalsForm" name="awardForm" method="post">
                             <div align="right">
-                                <?php echo JText::_('AWARDS_ADM_DISPLAY')."# "; echo $pageNav->writeLimitBox("index.php?option=$option&task=listusers&award=$awardres->id&Itemid=$Itemid"); ?>
+                                <?php echo JText::_('AWARDS_ADM_DISPLAY')."# "; echo $pageNav->getLimitBox("index.php?option=$option&task=listusers&award=$awardres->id&Itemid=$Itemid"); ?>
                             </div>
                             <input type="hidden" name="option" value="<?php echo $option ?>" />
                             <input type="hidden" name="limit" value="<?php echo $pageNav->limit;?>" />
@@ -125,8 +125,8 @@ class HTML_jAwards {
 			}
 ?>
 			</tbody></table>
-			<div align="center"><?php echo $pageNav->writePagesLinks("index.php?option=$option&task=listusers&award=$awardres->id&Itemid=$Itemid"). "<br />";
-		                              echo $pageNav->writePagesCounter() ?></div>
+			<div align="center"><?php echo $pageNav->getPagesLinks("index.php?option=$option&task=listusers&award=$awardres->id&Itemid=$Itemid"). "<br />";
+		                              echo $pageNav->getPagesCounter() ?></div>
 			
 			
 			
@@ -139,13 +139,13 @@ class HTML_jAwards {
 	}
 	
 	function createFooter(){
-		global $mosConfig_live_site, $jAwards_Config;
+		global $jAwards_Config;
 		
 		if ($jAwards_Config['showcredits']){ 
 ?>
 	<div class="ja_footer">Powered by 
 		<a href="http://www.arminhornung.de/Joomla/jAwards_en.html" target="_blank">
-			<img src="<?php echo $mosConfig_live_site;?>/administrator/components/com_jawards/images/medal_gold.png"/>jAwards
+			<img src="<?php echo JUri::base(true);?>/administrator/components/com_jawards/images/medal_gold.png"/>jAwards
 		</a>
 	</div>
 <?php	

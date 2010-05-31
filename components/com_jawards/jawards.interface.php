@@ -21,7 +21,7 @@ class jAwardsInterface{
 	var $_jAwards_Config;
 
 	function jAwardsInterface(){
-		global $jAwards_Config, $mosConfig_absolute_path;
+		global $jAwards_Config;
 		require(JPATH_ADMINISTRATOR.DS.'components/com_jawards'.DS."config.jawards.php");
 		$this->_jAwards_Config = $jAwards_Config;
 	}

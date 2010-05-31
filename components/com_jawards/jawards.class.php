@@ -9,7 +9,7 @@
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 
-class mosMedal extends JTable {
+class jAwardsMedal extends JTable {
 	var $id 			= null;
 	var $image 			= null;
 	var $name 			= null;
@@ -28,7 +28,7 @@ class mosMedal extends JTable {
 
 }
 
-class mosAward extends JTable {
+class jAwardsAward extends JTable {
 	var $id				= null;
 	var $award			= null;
 	var $userid			= null;

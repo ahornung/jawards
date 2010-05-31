@@ -14,7 +14,7 @@ global $jAwards_Config;
 
 require_once(JApplicationHelper::getPath('front_html'));
 require_once(JApplicationHelper::getPath('class'));
-require_once(JPATH_SITE.DS."includes/pageNavigation.php");
+jimport('joomla.html.pagination');
 
 // config file:
 require_once(JPATH_ADMINISTRATOR.DS.'components/com_jawards'.DS."config.jawards.php");
@@ -72,8 +72,7 @@ function view($Itemid, $option, $limit, $limitstart=0) {
 	$query = "SELECT * FROM #__menu WHERE id='$Itemid'";
 	$database->setQuery($query);
 	$menuItem = $database->loadObjectList();
-
-    $pageNav = new mosPageNav($total, $limitstart, $limit);
+    $pageNav = new JPagination($total, $limitstart, $limit);
 	HTML_jAwards::displayAwards($rows, $menuItem[0], $option, $pageNav);
 }
 
@@ -123,7 +122,7 @@ function listUsers($award, $option, $limit, $limitstart=0) {
 	}
 	
 	$awardres = $database->loadObjectList();
-	$pageNav = new mosPageNav($total, $limitstart, $limit);
+	$pageNav = new JPagination($total, $limitstart, $limit);
 	HTML_jAwards::showUsers($rows, $awardres[0], $option, $pageNav);
 
 }

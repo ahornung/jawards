@@ -11,13 +11,13 @@
 defined('_JEXEC') or die('Restricted access');
 
 // config:	
-global $jAwards_Config;
-global $database; 
+global $jAwards_Config; 
 
 require_once(JPATH_COMPONENT.DS."config.jawards.php");
 	
 require_once( JApplicationHelper::getPath( 'admin_html' ) );
 require_once( JApplicationHelper::getPath( 'class' ) );
+jimport('joomla.html.pagination');
 
 $showallusers = JRequest::getVar( 'showallusers', '');
 $cid = JRequest::getVar( 'cid', array(0) );
@@ -184,7 +184,6 @@ function showConfig( $option ) {
 
 
 function saveConfig ( $option ) {
-	global $mosConfig_absolute_path;
 	$saveConfigRedirect = &JFactory::getApplication();
 
    //Add code to check if config file is writeable.
@@ -216,10 +215,12 @@ function saveConfig ( $option ) {
 }
 
 function viewAwards( $option, $sortby="date") {
-	global $mainframe, $mosConfig_list_limit, $jAwards_Config;
+	global $jAwards_Config;
 	$database = &JFactory::getDbo();
+	$mainframe = &JFactory::getApplication();
 
-	$limit = $mainframe->getUserStateFromRequest( "viewlistlimit", 'limit', $mosConfig_list_limit );
+	$joomlaLimit = $mainframe->getCfg('list_limit');	
+	$limit = $mainframe->getUserStateFromRequest( "viewlistlimit", 'limit', $joomlaLimit);
 	$limitstart = $mainframe->getUserStateFromRequest( "view{$option}limitstart", 'limitstart', 0 );
 	
 	// Input from Search field:
@@ -244,8 +245,7 @@ function viewAwards( $option, $sortby="date") {
 	
 	$total = $database->loadResult();
 	
-	require_once("includes/pageNavigation.php");
-	$pageNav = new mosPageNav( $total, $limitstart, $limit );
+	$pageNav = new JPagination( $total, $limitstart, $limit );
 	
 	// Ordering the results:
 	switch ($sortby){
@@ -324,7 +324,7 @@ function editAward( $awardid, $option, $showallusers=false ) {
 	JHTML::_('behavior.tooltip');
 	$lists = array();
 
-	$row = new mosAward($database);
+	$row = new jAwardsAward($database);
 	$row->load( $awardid );
 	
 	// bind previous values:
@@ -464,8 +464,7 @@ function massAward($option){
 
 
 function saveMassAward( $task ) {
-	global $jAwards_Config,$mosConfig_mailfrom,$mosConfig_fromname,
-		$mosConfig_live_site, $mosConfig_sitename;
+	global $jAwards_Config;
 		
 	$database = &JFactory::getDbo();
 	$saveConfigRedirect = &JFactory::getApplication();
@@ -498,15 +497,20 @@ function saveMassAward( $task ) {
 	if ($jAwards_Config['emailusers']){
 		$database->setQuery("SELECT name FROM #__jawards_medals WHERE id = $awardid");
 		$awardname = $database->loadResult();
+		
+		$config = &JFactory::getConfig();
+		$mailFrom = $config->getValue('mailfrom');
+		$mailFromname = $config->getValue('fromname');
+		$mailSitename = $config->getValue('sitename');
+
 		set_time_limit(900);
 		for($i=0; $i< $numusers; $i++){
 			$userid = intval($userids[$i]);
-			$user = new mosUser($database);
-			$user->load($userid);
-		
-			$subject = _AWARDS_EMAIL_SUBJECT;
-			$text = sprintf(_AWARDS_EMAIL_TEXT, $user->name, $awardname, $mosConfig_live_site,$mosConfig_sitename);
-			mosMail($mosConfig_mailfrom,$mosConfig_fromname,$user->email,$subject,$text);  
+			$user = &JFactory::getUser($userid);
+			
+			$subject = JText::_('AWARDS_EMAIL_SUBJECT');
+			$text = sprintf(JText::_('AWARDS_EMAIL_TEXT'), $user->name, $awardname, JUri::base(true),$mailSitename);
+			JUtility::sendMail($mailFrom, $mailFromname, $user->email, $subject, $text);  
 		}
 	}
 		
@@ -514,13 +518,12 @@ function saveMassAward( $task ) {
 }
 
 function saveAward( $task ) {
-	global $jAwards_Config,$mosConfig_mailfrom,$mosConfig_fromname,
-		$mosConfig_live_site, $mosConfig_sitename;
+	global $jAwards_Config;
 	
 	$database = &JFactory::getDbo();
-	$saveConfigRedirect = &JFactory::getApplication();
+	$mainframe = &JFactory::getApplication();
 
-	$row = new mosAward($database);
+	$row = new jAwardsAward($database);
 
 	$msg = 'Saved Award info';
 	
@@ -541,23 +544,28 @@ function saveAward( $task ) {
 	}
 	// send out email
 	if ($sendEmail){
-		$user = new mosUser($database);
-		$user->load($row->userid);
+		
+		$user = &JFactory::getUser($row->userid);
 		
 		$database->setQuery("SELECT name FROM #__jawards_medals WHERE id = ".intval($row->award));
 		$awardname = $database->loadResult();
 		
-		$subject = _AWARDS_EMAIL_SUBJECT;
-		$text = sprintf(_AWARDS_EMAIL_TEXT, $user->name, $awardname, $mosConfig_live_site,$mosConfig_sitename);
-		mosMail($mosConfig_mailfrom,$mosConfig_fromname,$user->email,$subject,$text);  
+		$config = &JFactory::getConfig();
+		$mailFrom = $config->getValue('mailfrom');
+		$mailFromname = $config->getValue('fromname');
+		$mailSitename = $config->getValue('sitename');
+		
+		$subject = JText::_('AWARDS_EMAIL_SUBJECT');
+		$text = sprintf(JText::_('AWARDS_EMAIL_TEXT'), $user->name, $awardname, JUri::base(true),$mailSitename);
+		JUtility::sendMail($mailFrom, $mailFromname, $user->email, $subject, $text);  
 	}
-	$saveConfigRedirect->redirect( 'index2.php?option=com_jawards', $msg );
+	$mainframe->redirect( 'index2.php?option=com_jawards', $msg );
 }
 
 function cancelEditAward() {
 	$db = &JFactory::getDbo();
 
-	$row = new mosAward($database);
+	$row = new jAwardsAward($database);
 	$row->bind( $_POST );
 	$saveConfigRedirect = &JFactory::getApplication();
 	$saveConfigRedirect->redirect('index2.php?option=com_jawards');
@@ -568,10 +576,12 @@ function cancelEditAward() {
 // ---------- MEDAL MANAGEMENT ----------
 
 function viewMedals( $option ) {
-	global  $mainframe, $mosConfig_list_limit;
+	$mainframe = &JFactory::getApplication();
 	$database = &JFactory::getDbo();
 	
-	$limit = $mainframe->getUserStateFromRequest( "viewlistlimit", 'limit', $mosConfig_list_limit );
+	$app = &JFactory::getApplication();
+	$joomlaLimit = $app->getCfg('list_limit');	
+	$limit = $mainframe->getUserStateFromRequest( "viewlistlimit", 'limit', $joomlaLimit);
 	$limitstart = $mainframe->getUserStateFromRequest( "view{$option}limitstart", 'limitstart', 0 );
 	
 	$search = $mainframe->getUserStateFromRequest( "medalsearch{$option}", 'medalsearch', '' );
@@ -587,8 +597,7 @@ function viewMedals( $option ) {
 	$database->setQuery( $query );
 	$total = $database->loadResult();
 
-	require_once("includes/pageNavigation.php");
-	$pageNav = new mosPageNav( $total, $limitstart, $limit );
+	$pageNav = new JPagination( $total, $limitstart, $limit );
 
 	$sql = "SELECT *"
 	. "\n FROM #__jawards_medals as m";
@@ -614,7 +623,7 @@ function editMedal( $id, $option ) {
 	global $my;
 	$database = &JFactory::getDbo();
 
-	$row = new mosMedal($database);
+	$row = new jAwardsMedal($database);
 	$row->load($id);
 	
 	// Imagelist
@@ -626,10 +635,10 @@ function editMedal( $id, $option ) {
 }
 
 function saveMedal( $option ) {
-	$saveConfigRedirect = &JFactory::getApplication();
+	$mainframe = &JFactory::getApplication();
 	$database = &JFactory::getDbo();
 
-	$row = new mosMedal( $database );
+	$row = new jAwardsMedal( $database );
 	if (!$row->bind( $_POST )) {
 		echo $row->getError();
 		exit();
@@ -640,7 +649,7 @@ function saveMedal( $option ) {
         }
 		
 	if (!$row->check()) {
-		$saveConfigRedirect->redirect( "index2.php?option=$option&task=editclient&cid[]=$row->id", $row->getError() );
+		$mainframe->redirect( "index2.php?option=$option&task=editclient&cid[]=$row->id", $row->getError() , 'error');
 	}
 
 	if (!$row->store()) {
@@ -650,36 +659,37 @@ function saveMedal( $option ) {
 	$row->reorder();
 	$row->checkin();
 	$msg = 'Saved Medal info';
-	$saveConfigRedirect->redirect( "index2.php?option=$option&task=listmedals",$msg );
+	$mainframe->redirect( "index2.php?option=$option&task=listmedals",$msg );
 }
 
 function cancelEditMedal( $option ) {
-	$saveConfigRedirect = &JFactory::getApplication();
+	$mainframe = &JFactory::getApplication();
 	$database = &JFactory::getDbo();
-	$row = new mosMedal( $database );
+	$row = new jAwardsMedal( $database );
 	$row->bind( $_POST );
 	
-	$saveConfigRedirect->redirect( "index2.php?option=$option&task=listmedals" );
+	$mainframe->redirect( "index2.php?option=$option&task=listmedals" );
 }
 
 function reorder($id, $direction, $option){
-	global $saveConfigRedirect;
+	$mainframe = &JFactory::getApplication();
     $database = &JFactory::getDbo();
     
-    $row = new mosMedal($database);
+    $row = new jAwardsMedal($database);
     $row->load($id);
     
     $row->move($direction);
     
-    $saveConfigRedirect->redirect("index2.php?option=$option&task=listmedals");
+    $mainframe->redirect("index2.php?option=$option&task=listmedals");
 }
 
 function saveOrder($cid, $option){
-	$saveConfigRedirect = &JFactory::getApplication();
+	$mainframe = &JFactory::getApplication();
     $db = &JFactory::getDbo();
     
-    $order = mosGetParam( $_POST, 'order', array(0) );
-    $row = new mosMedal($database);
+    //$order = mosGetParam( $_POST, 'order', array(0) );
+    $order = JRequest::getVar('order', array(0));
+    $row = new jAwardsMedal($database);
     $conditions = array();
     
     for($i=0,$n=count($cid);$i<$n;$i++){
@@ -698,33 +708,33 @@ function saveOrder($cid, $option){
         $row->reorder();
 	}
 
-	$saveConfigRedirect->redirect("index2.php?option=$option&task=listmedals");
+	$mainframe->redirect("index2.php?option=$option&task=listmedals");
 }
   
 function uploadFile ( $option ) {
-	$saveConfigRedirect = &JFactory::getApplication();
+	$mainframe = &JFactory::getApplication();
 
 	// check for upload errors:
 	if ($_FILES["medal_file"]["error"] > 0){
-		$saveConfigRedirect->redirect( "index2.php?option=$option&task=listmedals", "UPLOAD ERROR: " . $_FILES["medal_file"]["error"] );
+		$saveConfigRedirect->redirect( "index2.php?option=$option&task=listmedals", "UPLOAD ERROR: " . $_FILES["medal_file"]["error"] , 'error');
 	} else {
 		$upload_path = JA_MEDABSPATH.'/'.$_FILES["medal_file"]["name"];
 		
 		if (file_exists($upload_path)){
-      			$saveConfigRedirect->redirect( "index2.php?option=$option&task=listmedals", "UPLOAD ERROR: File ".$upload_path ."already exists");
+      			$mainframe->redirect( "index2.php?option=$option&task=listmedals", "UPLOAD ERROR: File ".$upload_path ."already exists", 'error');
       		}
     		else  {
 			
 			move_uploaded_file($_FILES["medal_file"]["tmp_name"], $upload_path);
 			@chmod ($upload_path, 0755);
-			$saveConfigRedirect->redirect( "index2.php?option=$option&task=listmedals", "Successfully uploaded. ");
+			$mainframe->redirect( "index2.php?option=$option&task=listmedals", "Successfully uploaded. You can create a new medal using this image now.");
       		}
 	}
 
 }
 
 function removeMedal( $cid ) {
-	$saveConfigRedirect = &JFactory::getApplication();
+	$mainframe = &JFactory::getApplication();
 	$database = &JFactory::getDbo();
 	if (count( $cid )) {
 		$cids = implode( ',', $cid );
@@ -737,7 +747,7 @@ function removeMedal( $cid ) {
 
 		
 		if ($numberOfAwards > 0){
-			$saveConfigRedirect->redirect( 'index2.php?option=com_jawards',"No Medal deleted! There are still $numberOfAwards awards associated to the medals you wanted to delete. Please delete them first." );		
+			$mainframe->redirect( 'index2.php?option=com_jawards',"No Medal deleted! There are still $numberOfAwards awards associated to the medals you wanted to delete. Please delete them first.", 'error' );		
 		}
 		else{
 			
@@ -749,7 +759,7 @@ function removeMedal( $cid ) {
 			if (!$database->query()) {
 				echo "<script> alert('".$database->getErrorMsg()."'); window.history.go(-1); </script>\n";
 			}
-			$saveConfigRedirect->redirect( 'index2.php?option=com_jawards&task=listmedals','Selected Medals deleted!' );
+			$mainframe->redirect( 'index2.php?option=com_jawards&task=listmedals','Selected Medals deleted!' );
 		}
 	}
 	
