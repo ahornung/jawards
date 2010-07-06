@@ -145,7 +145,7 @@ class HTML_jAwards {
 ?>
 	<div class="ja_footer">Powered by 
 		<a href="http://www.arminhornung.de/Joomla/jAwards_en.html" target="_blank">
-			<img src="<?php echo JUri::base(true);?>/administrator/components/com_jawards/images/medal_gold.png"/>jAwards
+			<img src="<?php echo JUri::base(false);?>administrator/components/com_jawards/images/medal_gold.png"/>jAwards
 		</a>
 	</div>
 <?php	

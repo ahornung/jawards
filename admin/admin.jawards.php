@@ -145,8 +145,8 @@ function showConfig( $option ) {
 	$lists = array();	
 	// make a standard yes/no list
 	$yesno = array();
-	$yesno[] = JHTML::_('select.option', '0', JText::_('AWARDS_NO') );
-	$yesno[] = JHTML::_('select.option', '1', JText::_('AWARDS_YES') );
+	$yesno[] = JHTML::_('select.option', '0', JText::_('No') );
+	$yesno[] = JHTML::_('select.option', '1', JText::_('Yes') );
 	
 	$exampleDate = "2008-02-28";
 	$dateformat = array();
@@ -161,6 +161,8 @@ function showConfig( $option ) {
 	$lists['showawardReason'] = JHTML::_('select.genericlist', $yesno, 'cfg_showawardreason', 'class="inputbox" size="1"', 'value', 'text', $jAwards_Config['showawardreason'] );
 	
 	$lists['showcredits'] = JHTML::_('select.genericlist', $yesno, 'cfg_showcredits', 'class="inputbox" size="1"', 'value', 'text', $jAwards_Config['showcredits'] );
+	
+	$lists['username_ids'] = JHTML::_('select.genericlist', $yesno, 'cfg_username_ids', 'class="inputbox" size="1"', 'value', 'text', $jAwards_Config['username_ids'] );
 	
 	$lists['cbIntegration'] = JHTML::_('select.genericlist', $yesno, 'cfg_cbintegration', 'class="inputbox" size="1"', 'value', 'text', $jAwards_Config['cbintegration'] );
 	
@@ -334,6 +336,8 @@ function editAward( $awardid, $option, $showallusers=false ) {
 	$row->reason = JRequest::getVar( 'reason', $row->reason);
 	$row->date = JRequest::getVar( 'date', $row->date);
 	$showallusers = JRequest::getVar( 'showallusers', $showallusers);
+	if (!$jAwards_Config['username_ids'])
+		$showallusers = true;
 	
 	if ($row->date=='') {
 		$addDate = date($jAwards_Config['dateformat']);
@@ -620,7 +624,6 @@ function viewMedals( $option ) {
 }
 
 function editMedal( $id, $option ) {
-	global $my;
 	$database = &JFactory::getDbo();
 
 	$row = new jAwardsMedal($database);
@@ -685,16 +688,17 @@ function reorder($id, $direction, $option){
 
 function saveOrder($cid, $option){
 	$mainframe = &JFactory::getApplication();
-    $db = &JFactory::getDbo();
+    $database = &JFactory::getDbo();
     
-    //$order = mosGetParam( $_POST, 'order', array(0) );
-    $order = JRequest::getVar('order', array(0));
+    $order = JRequest::getVar('order', array(), 'post', 'array');
+    JArrayHelper::toInteger($cid);
+	JArrayHelper::toInteger($order);
+	
     $row = new jAwardsMedal($database);
-    $conditions = array();
     
     for($i=0,$n=count($cid);$i<$n;$i++){
         $row->load($cid[$i]);
-			
+        			
         if ($row->ordering != $order[$i]) {
 			$row->ordering = $order[$i];
 				

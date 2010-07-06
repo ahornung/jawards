@@ -94,6 +94,11 @@ class HTML_awards {
          	<td align="left" valign="top"><?php echo JText::_('AWARDS_ADM_CB_INTEGRATION_EXPLANATION'); ?></td>
       	</tr>
       	<tr align="center" valign="middle" class="row<?php $rowcount = ($rowcount+1)%2; echo $rowcount;?>">
+         	<td align="left" valign="top"><?php echo JText::_('AWARDS_ADM_USERNAME_IDS'); ?></td>
+         	<td align="left" valign="top"><?php echo $lists['username_ids']; ?></td>
+         	<td align="left" valign="top"><?php echo JText::_('AWARDS_ADM_USERNAME_IDS_EXPLANATION'); ?></td>
+      	</tr>
+      	<tr align="center" valign="middle" class="row<?php $rowcount = ($rowcount+1)%2; echo $rowcount;?>">
          	<td align="left" valign="top"><?php echo JText::_('AWARDS_ADM_EMAIL_USERS'); ?></td>
          	<td align="left" valign="top"><?php echo $lists['emailUsers']; ?></td>
          	<td align="left" valign="top"><?php echo JText::_('AWARDS_ADM_EMAIL_USERS_EXPLANATION'); ?></td>
@@ -829,7 +834,7 @@ function createFooter(){
 ?>
 	<div style="padding:10px;text-align:center">Powered by 
 		<a href="http://www.arminhornung.de/Joomla/jAwards_en.html" target="_blank">
-			<img style="border:0px;vertical-align:middle;" src="<?php echo JUri::base(true);?>/administrator/components/com_jawards/images/medal_gold.png"/>jAwards
+			<img style="border:0px;vertical-align:middle;" src="<?php echo JUri::base(false);?>components/com_jawards/images/medal_gold.png"/>jAwards
 		</a> <?php echo jAwardsInterface::getVersion(); ?>
 	</div>
 <?php	

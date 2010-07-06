@@ -25,34 +25,18 @@ function com_install() {
     jimport('joomla.filesystem.folder');
     jimport('joomla.filesystem.file');
 
-    $path = JPATH_ADMINISTRATOR.DS.'components'.DS.'com_jawards1.5';
-
 # Show installation result to user
   ?>
 	<center>
-Installation of jAwards, the awards-component for Joomla! 1.5
-    	<br /> Copyright 2010 Chris Lehr
+<h2>Installation of jAwards, the awards-component for Joomla! 1.5</h2>
+    	<br /> Copyright 2007-2010, <a href="http://www.arminhornung.de/">Armin Hornung</a>
     	<br /> Released under GNU/GPL
+    	<br /> More information at <a href="http://www.arminhornung.de/Joomla/jAwards_en.html">http://www.arminhornung.de/Joomla/jAwards_en.html</a> and <a href="http://joomlacode.org/gf/project/jawards/">http://joomlacode.org/gf/project/jawards/</a>.
+    	<br />
              <h3>Installation Process:</h3>
         
 	<?php
-	# Set up new icons for admin menu
-      echo "Start correcting icons in administration backend.<br />";
-      $db->setQuery("UPDATE #__components SET admin_menu_img='components/com_jawards/images/medal_gold.png' WHERE admin_menu_link='option=com_jawards'");
-      $iconresult[0] = $db->query();
-      $db->setQuery("UPDATE #__components SET admin_menu_img='components/com_jawards/images/medal_silver.png' WHERE admin_menu_link='option=com_jawards&task=listmedals'");
-      $iconresult[1] = $db->query();
-      $db->setQuery("UPDATE #__components SET admin_menu_img='js/ThemeOffice/config.png' WHERE admin_menu_link='option=com_jawards&task=showconfig'");
-      $iconresult[2] = $db->query();
-         
-      foreach ($iconresult as $i=>$icresult) {
-        if ($icresult) {
-          echo "<font color='green'>FINISHED:</font> Image of menu entry $i has been corrected.<br />";
-        } else {
-          echo "<font color='red'>ERROR:</font> Image of menu entry $i could not be corrected.<br />";
-        }
-      }
-	
+
 	if(is_writable(JPATH_SITE.DS."images/")) {
 		if(!file_exists(JPATH_SITE.DS."images/medals/")){
 	    	if(mkdir(JPATH_SITE.DS."images/medals/")) 

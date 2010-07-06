@@ -28,7 +28,7 @@ class TOOLBAR_awards {
 		JToolbarHelper::spacer();
 		if ( $id ) {
 			// for existing content items the button is renamed `close`
-			JToolbarHelper::cancel( 'cancel', 'Close' );
+			JToolbarHelper::cancel( 'cancel', JText::_('Close'));
 		} else {
 			JToolbarHelper::cancel();
 		}
@@ -47,9 +47,9 @@ class TOOLBAR_awards {
 		JToolbarHelper::spacer();
 		JToolbarHelper::addNew('new');
 		JToolbarHelper::spacer();
-		JToolbarHelper::addNew('massaward', 'Mass awarding');
+		JToolbarHelper::addNew('massaward', JText::_('AWARDS_ADM_MASS_AWARD'));
 		JToolbarHelper::spacer();
-		JToolbarHelper::cancel( 'canelmedal' );
+		JToolbarHelper::cancel( 'cancelmedal' );
 		JToolbarHelper::spacer();
 	}
 }
@@ -62,7 +62,7 @@ class TOOLBAR_medals {
 		JToolbarHelper::spacer();
 		if ( $id ) {
 			// for existing content items the button is renamed `close`
-			JToolbarHelper::cancel( 'cancelmedal', 'Close' );
+			JToolbarHelper::cancel( 'cancelmedal', JText::_('Close'));
 		} else {
 			JToolbarHelper::cancel( 'cancelmedal' );
 		}
@@ -76,9 +76,9 @@ class TOOLBAR_medals {
 	}
 
 	function _DEFAULT() {
-		JToolbarHelper::deleteList('If there are still awards associated to the medals you have chosen, nothing will be deleted','removemedal','Remove');
+		JToolbarHelper::deleteList('If there are still awards associated to the medals you have chosen, nothing will be deleted','removemedal');
 		JToolbarHelper::spacer();
-		JToolbarHelper::custom('upload', 'upload.png','upload.png', 'Upload medal', false );
+		JToolbarHelper::custom('upload', 'upload.png','upload.png', JText::_('AWARDS_ADM_MEDAL_IMAGE_UPLOAD'), false );
 		JToolbarHelper::spacer();
 		JToolbarHelper::editListX( 'editmedal' );
 		JToolbarHelper::spacer();
