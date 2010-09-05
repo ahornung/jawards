@@ -173,13 +173,13 @@ class HTML_awards {
 			<input type="checkbox" name="toggle" value="" onClick="checkAll(<?php echo count( $rows ); ?>);" />
 			</th>
 			<th align="left" nowrap>
-			<a href="index2.php?option=com_jawards&amp;task=medals&amp;sortby=award" title="<?php echo JText::_('AWARDS_ADM_ORDERBY_AWARD'); ?>"><?php echo JText::_('AWARDS_AWARD'); ?></a>
+			<a href="index2.php?option=com_jawards&amp;task=awards&amp;sortby=award" title="<?php echo JText::_('AWARDS_ADM_ORDERBY_AWARD'); ?>"><?php echo JText::_('AWARDS_AWARD'); ?></a>
 			</th>
 			<th align="left" nowrap>
-			<a href="index2.php?option=com_jawards&amp;task=medals&amp;sortby=user" title="<?php echo JText::_('AWARDS_ADM_ORDERBY_AWARDED_TO'); ?>"><?php echo JText::_('AWARDS_ADM_AWARDED_TO'); ?></a>
+			<a href="index2.php?option=com_jawards&amp;task=awards&amp;sortby=user" title="<?php echo JText::_('AWARDS_ADM_ORDERBY_AWARDED_TO'); ?>"><?php echo JText::_('AWARDS_ADM_AWARDED_TO'); ?></a>
 			</th>
 			<th align="left" nowrap>
-			<a href="index2.php?option=com_jawards&amp;task=medals&amp;sortby=date" title="<?php echo JText::_('AWARDS_ADM_ORDERBY_DATE'); ?>"><?php echo JText::_('AWARDS_DATE'); ?></a>
+			<a href="index2.php?option=com_jawards&amp;task=awards&amp;sortby=date" title="<?php echo JText::_('AWARDS_ADM_ORDERBY_DATE'); ?>"><?php echo JText::_('AWARDS_DATE'); ?></a>
 			</th>
 		</tr>
 		<?php

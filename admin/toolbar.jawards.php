@@ -13,7 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 require_once( JApplicationHelper::getPath( 'toolbar_html' ) );
 
 switch ($task) {
-	case 'showconfig':
+	case 'config':
 		TOOLBAR_config::_DEFAULT();
 		break;
 
@@ -26,7 +26,7 @@ switch ($task) {
 		TOOLBAR_medals::_UPLOAD();
 		break;
 
-	case 'listmedals':
+	case 'medals':
 		TOOLBAR_medals::_DEFAULT();
 		break;
 
@@ -39,6 +39,7 @@ switch ($task) {
 		TOOLBAR_awards::_EDIT();
 		break;
 
+	case 'awards':	
 	default:
 		TOOLBAR_awards::_DEFAULT();
 		break;

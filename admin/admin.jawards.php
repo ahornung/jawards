@@ -316,7 +316,7 @@ function removeAward( $cid ) {
 			echo "<script> alert('".$database->getErrorMsg()."'); window.history.go(-1); </script>\n";
 		}
 	}
-	$saveConfigRedirect->redirect( 'index2.php?option=com_jawards' );
+	$saveConfigRedirect->redirect( 'index2.php?option=com_jawards&task=awards' );
 }
 
 // Adds and Edits Awards
@@ -520,7 +520,7 @@ function saveMassAward( $task ) {
 		}
 	}
 		
-  	$saveConfigRedirect->redirect( 'index2.php?option=com_jawards', $msg );
+  	$saveConfigRedirect->redirect( 'index2.php?option=com_jawards&task=awards', $msg );
 }
 
 function saveAward( $task ) {
@@ -565,7 +565,7 @@ function saveAward( $task ) {
 		$text = sprintf(JText::_('AWARDS_EMAIL_TEXT'), $user->name, $awardname, JUri::base(true),$mailSitename);
 		JUtility::sendMail($mailFrom, $mailFromname, $user->email, $subject, $text);  
 	}
-	$mainframe->redirect( 'index2.php?option=com_jawards', $msg );
+	$mainframe->redirect( 'index2.php?option=com_jawards&task=awards', $msg );
 }
 
 function cancelEditAward() {
@@ -574,7 +574,7 @@ function cancelEditAward() {
 	$row = new jAwardsAward($database);
 	$row->bind( $_POST );
 	$saveConfigRedirect = &JFactory::getApplication();
-	$saveConfigRedirect->redirect('index2.php?option=com_jawards');
+	$saveConfigRedirect->redirect('index2.php?option=com_jawards&task=awards');
 }
 
 
