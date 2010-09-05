@@ -40,9 +40,9 @@
   <administration>
 	  <menu img="components/com_jawards/images/medal_gold.png">jAwards</menu>
 	  <submenu>
-		  <menu img="js/ThemeOffice/component.png" task="showconfig">Configuration</menu>
-		  <menu img="components/com_jawards/images/medal_gold.png" task="listmedals">Medals Management</menu>
-		  <menu img="components/com_jawards/images/medal_silver.png" task="list">Awards Management</menu>
+		  <menu img="js/ThemeOffice/component.png" task="config">Configuration</menu>
+		  <menu img="components/com_jawards/images/medal_gold.png" task="medals">Medals Management</menu>
+		  <menu img="components/com_jawards/images/medal_silver.png" task="awards">Awards Management</menu>
 	  </submenu> 
 	  <files folder="admin">
 		  <filename>install.sql</filename>

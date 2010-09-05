@@ -33,7 +33,7 @@ if (!is_array( $cid )) {
 switch ($task) {
 	
 	// Config:
-	case 'showconfig':
+	case 'config':
 		showConfig($option);
 		break;
 	case 'saveconfig':
@@ -63,7 +63,7 @@ switch ($task) {
 		cancelEditMedal( $option );
 		break;
 
-	case 'listmedals':
+	case 'medals':
 		viewMedals( $option );
 		break;
 		
@@ -125,7 +125,7 @@ switch ($task) {
 		saveMassAward($task);
 		break;
 
-	case 'list':
+	case 'awards':
 	default:
 		viewAwards( $option, $sortby);
 		break;
@@ -210,7 +210,7 @@ function saveConfig ( $option ) {
    if ($fp = fopen( $configfile, "w")) {
       fputs($fp, $txt, strlen($txt));
       fclose ($fp);
-      $saveConfigRedirect->redirect( "index2.php?option=$option&task=showconfig", "Configuration file saved" );
+      $saveConfigRedirect->redirect( "index2.php?option=$option&task=config", "Configuration file saved" );
    } else {
       $saveConfigRedirect->redirect( "index2.php?option=$option", "FATAL ERROR: File could not be opened." );
    }
@@ -339,10 +339,12 @@ function editAward( $awardid, $option, $showallusers=false ) {
 	if (!$jAwards_Config['username_ids'])
 		$showallusers = true;
 	
+	// TODO: change backend date format to frontend one
+	// => this needs to be considered when storing the awards in the DB!
 	if ($row->date=='') {
-		$addDate = date($jAwards_Config['dateformat']);
-		$addDate = str_ireplace("%","",$addDate);
-		$row->date = $addDate;
+//		$addDate = date($jAwards_Config['dateformat']);
+//		$addDate = str_ireplace("%","",$addDate);
+		$row->date = date('Y-m-d');
 	}
 	
 	if ($showallusers){
@@ -662,7 +664,7 @@ function saveMedal( $option ) {
 	$row->reorder();
 	$row->checkin();
 	$msg = 'Saved Medal info';
-	$mainframe->redirect( "index2.php?option=$option&task=listmedals",$msg );
+	$mainframe->redirect( "index2.php?option=$option&task=medals",$msg );
 }
 
 function cancelEditMedal( $option ) {
@@ -671,7 +673,7 @@ function cancelEditMedal( $option ) {
 	$row = new jAwardsMedal( $database );
 	$row->bind( $_POST );
 	
-	$mainframe->redirect( "index2.php?option=$option&task=listmedals" );
+	$mainframe->redirect( "index2.php?option=$option&task=medals" );
 }
 
 function reorder($id, $direction, $option){
@@ -683,7 +685,7 @@ function reorder($id, $direction, $option){
     
     $row->move($direction);
     
-    $mainframe->redirect("index2.php?option=$option&task=listmedals");
+    $mainframe->redirect("index2.php?option=$option&task=medals");
 }
 
 function saveOrder($cid, $option){
@@ -712,7 +714,7 @@ function saveOrder($cid, $option){
         $row->reorder();
 	}
 
-	$mainframe->redirect("index2.php?option=$option&task=listmedals");
+	$mainframe->redirect("index2.php?option=$option&task=medals");
 }
   
 function uploadFile ( $option ) {
@@ -720,18 +722,18 @@ function uploadFile ( $option ) {
 
 	// check for upload errors:
 	if ($_FILES["medal_file"]["error"] > 0){
-		$saveConfigRedirect->redirect( "index2.php?option=$option&task=listmedals", "UPLOAD ERROR: " . $_FILES["medal_file"]["error"] , 'error');
+		$saveConfigRedirect->redirect( "index2.php?option=$option&task=medals", "UPLOAD ERROR: " . $_FILES["medal_file"]["error"] , 'error');
 	} else {
 		$upload_path = JA_MEDABSPATH.'/'.$_FILES["medal_file"]["name"];
 		
 		if (file_exists($upload_path)){
-      			$mainframe->redirect( "index2.php?option=$option&task=listmedals", "UPLOAD ERROR: File ".$upload_path ."already exists", 'error');
+      			$mainframe->redirect( "index2.php?option=$option&task=medals", "UPLOAD ERROR: File ".$upload_path ."already exists", 'error');
       		}
     		else  {
 			
 			move_uploaded_file($_FILES["medal_file"]["tmp_name"], $upload_path);
 			@chmod ($upload_path, 0755);
-			$mainframe->redirect( "index2.php?option=$option&task=listmedals", "Successfully uploaded. You can create a new medal using this image now.");
+			$mainframe->redirect( "index2.php?option=$option&task=medals", "Successfully uploaded. You can create a new medal using this image now.");
       		}
 	}
 
@@ -763,7 +765,7 @@ function removeMedal( $cid ) {
 			if (!$database->query()) {
 				echo "<script> alert('".$database->getErrorMsg()."'); window.history.go(-1); </script>\n";
 			}
-			$mainframe->redirect( 'index2.php?option=com_jawards&task=listmedals','Selected Medals deleted!' );
+			$mainframe->redirect( 'index2.php?option=com_jawards&task=medals','Selected Medals deleted!' );
 		}
 	}
 	
