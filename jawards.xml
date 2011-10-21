@@ -16,7 +16,9 @@
   <files folder="site">
         <filename>jawards.class.php</filename>
         <filename>jawards.php</filename>
-        <filename>jawards.html.php</filename>
+        <filename>controller.php</filename>
+        <folder>views</folder>
+        <folder>models</folder>
         <filename>jawards.interface.php</filename>
         <filename>template.css</filename>
         <filename>index.html</filename>
