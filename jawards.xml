@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 
-<extension type="component" version="1.7">
+<extension type="component" version="1.7" method="upgrade">
 
   <name>jAwards</name>
   <author>Armin Hornung, Chris Lehr</author>
@@ -46,9 +46,7 @@
 		  <menu img="components/com_jawards/images/medal_gold.png" task="medals">COM_JAWARDS_MEDALS_MANAGEMENT</menu>
 		  <menu img="components/com_jawards/images/medal_silver.png" task="awards">COM_JAWARDS_AWARDS_MANAGEMENT</menu>
 	  </submenu> 
-	  <files folder="admin">
-		  <filename>install.sql</filename>
-		  <filename>install.php</filename>	  	  
+	  <files folder="admin"> 
 		  <filename>admin.jawards.php</filename>
 		  <filename>admin.jawards.html.php</filename>
 		  <filename>config.jawards.php</filename>
