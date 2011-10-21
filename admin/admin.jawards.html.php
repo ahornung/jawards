@@ -10,10 +10,23 @@
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 
-include_once(JPATH_SITE.DS."components/com_jawards/jawards.interface.php");
+include_once(JPATH_SITE.DS."components".DS."com_jawards".DS."jawards.interface.php");
 jimport('joomla.html.html.grid');
+JHtml::_('behavior.formvalidation'); 
 
+?>
+  <script language="javascript">
+  <!--
+  window.addEvent('domready', function() {
+    document.formvalidator.setHandler('dropselected',
+    function (value) {
+        return (value > 0);
+    });
+  });
+  //-->
+  </script>
 
+<?php
 class HTML_awards {
 	
 	function config(&$jAwards_Config, &$lists, $option){
@@ -21,7 +34,7 @@ class HTML_awards {
 		?>
 		<script language="javascript" type="text/javascript">
 		<!--
-  		function submitbutton(pressbutton) {
+  		Joomla.submitbutton = function(pressbutton) {
     		var form = document.adminForm;
     		if (pressbutton == 'cancel') {
       			submitform(pressbutton);
@@ -41,7 +54,7 @@ class HTML_awards {
 		//-->
 		</script>
         
-		<form action="index2.php" method="post" name="adminForm">
+		<form action="index.php" method="post" name="adminForm" id="adminForm" id="adminForm">
 
 		<table class="adminheading">
 		<tr>
@@ -135,7 +148,7 @@ class HTML_awards {
 		
 		JHTML::_('behavior.tooltip');
 		?>
-		<form action="index2.php" method="post" name="adminForm">
+		<form action="index.php" method="post" name="adminForm" id="adminForm">
 		<table class="adminheading">
 		<tr>
 			<th>
@@ -173,17 +186,17 @@ class HTML_awards {
 			<input type="checkbox" name="toggle" value="" onClick="checkAll(<?php echo count( $rows ); ?>);" />
 			</th>
 			<th align="left" nowrap>
-			<a href="index2.php?option=com_jawards&amp;task=awards&amp;sortby=award" title="<?php echo JText::_('AWARDS_ADM_ORDERBY_AWARD'); ?>"><?php echo JText::_('AWARDS_AWARD'); ?></a>
+			<a href="index.php?option=com_jawards&amp;task=awards&amp;sortby=award" title="<?php echo JText::_('AWARDS_ADM_ORDERBY_AWARD'); ?>"><?php echo JText::_('AWARDS_AWARD'); ?></a>
 			</th>
 			<th align="left" nowrap>
-			<a href="index2.php?option=com_jawards&amp;task=awards&amp;sortby=user" title="<?php echo JText::_('AWARDS_ADM_ORDERBY_AWARDED_TO'); ?>"><?php echo JText::_('AWARDS_ADM_AWARDED_TO'); ?></a>
+			<a href="index.php?option=com_jawards&amp;task=awards&amp;sortby=user" title="<?php echo JText::_('AWARDS_ADM_ORDERBY_AWARDED_TO'); ?>"><?php echo JText::_('AWARDS_ADM_AWARDED_TO'); ?></a>
 			</th>
 			<th align="left" nowrap>
-			<a href="index2.php?option=com_jawards&amp;task=awards&amp;sortby=date" title="<?php echo JText::_('AWARDS_ADM_ORDERBY_DATE'); ?>"><?php echo JText::_('AWARDS_DATE'); ?></a>
+			<a href="index.php?option=com_jawards&amp;task=awards&amp;sortby=date" title="<?php echo JText::_('AWARDS_ADM_ORDERBY_DATE'); ?>"><?php echo JText::_('AWARDS_DATE'); ?></a>
 			</th>
 		</tr>
 		<?php
-		$editLink="index2.php?option=com_jawards&amp;task=editA&amp;hidemainmenu=1&amp;cid=";
+		$editLink="index.php?option=com_jawards&amp;task=editA&amp;hidemainmenu=1&amp;cid=";
 		$k = 0;
 		for ($i=0, $n=count( $rows ); $i < $n; $i++) {
 			$row = &$rows[$i];
@@ -245,26 +258,33 @@ class HTML_awards {
 		<!--
 <?php HTML_awards::createAutoReasonJS($lists['reason'], is_null($_row->userid)); ?>
 		
-		function submitbutton(pressbutton) {	
-			var form = document.adminForm;
+		Joomla.submitbutton = function(pressbutton) {	
 			if (pressbutton == 'cancel') {
 				submitform( pressbutton );
 				return;
 			}
-			// do field validation
-			var entered_userid = trim(document.adminForm.userid.value);
-			if (entered_userid < 1) {
-				alert( "<?php echo JText::_('AWARDS_ADM_ERROR_SELECT_USER'); ?>" );
-			} else if (getSelectedValue('adminForm','award') < 1) {
-				alert( "<?php echo JText::_('AWARDS_ADM_ERROR_SELECT_AWARD'); ?>" );
-			} else {
-				submitform( pressbutton );
-			}
+			var f = document.adminForm;
+            if (document.formvalidator.isValid(f)) {
+                f.check.value='<?php echo JUtility::getToken(); ?>'; //send token
+                submitform(pressbutton);    
+            }
+            else {
+                var msg = new Array();
+                msg.push('<?php echo JText::_('AWARDS_ADM_ERROR_INVALID_INPUT')?>');
+                if ($('userlist').hasClass('invalid')) {
+                    msg.push('<?php echo JText::_('AWARDS_ADM_ERROR_SELECT_USER')?>');    
+                }
+                if($('award').hasClass('invalid')){
+                    msg.push('<?php echo JText::_('AWARDS_ADM_ERROR_SELECT_AWARD')?>');
+                }
+                alert (msg.join('\n'));
+                //TODO: validate entered date!
+            }
 		}
 		//-->
 		</script>
-		<form action="index2.php" method="post" name="adminForm">
-				
+		<form action="index.php" method="post" name="adminForm" id="adminForm" class="form-validate">
+	    <input type="hidden" name="check" value="post"/>
 		<table class="adminheading">
 		<tr>
 			<th>
@@ -291,13 +311,13 @@ class HTML_awards {
 				
 				if ($showallusers){
 					?>
-						<input class="inputbox" readonly type="text" name="userid" size="5" maxlength="10" valign="top" value="<?php echo $_row->userid; ?>">
+						<input class="inputbox" readonly type="text" name="userid" class="required validate-numeric validate-dropselected" size="5" maxlength="10" valign="top" value="<?php echo $_row->userid; ?>">
 						
 						<?php echo $lists['users'];
 				}
 				 else{
 				 	?>
-				 		<input class="inputbox" type="text" name="userid" size="5" maxlength="10" valign="top" value="<?php echo $_row->userid; ?>">
+				 		<input class="inputbox" type="text" name="userid" class="required validate-numeric validate-dropselected" size="5" maxlength="10" valign="top" value="<?php echo $_row->userid; ?>">
 				 		<a href="#" onclick="document.adminForm.showallusers.value='true';document.adminForm.submit();"><?php echo JText::_('AWARDS_ADM_SHOW_USERS'); ?></a>
 				 	<?php
 				 	
@@ -320,7 +340,7 @@ class HTML_awards {
 				</span>			
 			</td>
 			<td align="left">
-			<input class="inputbox" type="text" name="date" size="10" maxlength="10" valign="top" value="<?php echo $_row->date; ?>">
+			<input class="inputbox required" type="text" name="date" id="date" size="10" maxlength="10" valign="top" value="<?php echo $_row->date; ?>">
 			</td>
 		</tr>
 		<tr>
@@ -396,30 +416,38 @@ class HTML_awards {
 			}
 		}
 		
-		function submitbutton(pressbutton) {
+		Joomla.submitbutton = function(pressbutton) {
 			var form = document.adminForm;
 			if (pressbutton == 'cancel') {
 				submitform( pressbutton );
 				return;
 			}
-			// do field validation
-			if (getSelectedValue('adminForm','award') < 1) {
-				alert("<?php echo JText::_('AWARDS_ADM_ERROR_SELECT_AWARD'); ?>");
-			} else if (document.adminForm["seluserlist[]"].length == 0){
-				alert("<?php echo JText::_('AWARDS_ADM_ERROR_SELECT_USER'); ?>");
-			} else{
-				for(var j = 0; j < document.adminForm["seluserlist[]"].length; j++) {
-  					document.adminForm["seluserlist[]"][j].selected = true; // Alle Eintraege selektieren und
- 				}
-				submitform( pressbutton );
-			}
+			var f = document.adminForm;
+            if (document.formvalidator.isValid(f)) {
+                for(var j = 0; j < document.adminForm["seluserlist[]"].length; j++) {
+                    document.adminForm["seluserlist[]"][j].selected = true; 
+                }
+                f.check.value='<?php echo JUtility::getToken(); ?>'; //send token
+                submitform(pressbutton);    
+            } else {
+                var msg = new Array();
+                msg.push('<?php echo JText::_('AWARDS_ADM_ERROR_INVALID_INPUT')?>');
+                if ($('award').hasClass('invalid')) {
+                    msg.push('<?php echo JText::_('AWARDS_ADM_ERROR_SELECT_AWARD')?>');    
+                }
+                // TODO: check if user selected:
+//                             } else if (document.adminForm["seluserlist[]"].length == 0){
+//                 alert("<?php echo JText::_('AWARDS_ADM_ERROR_SELECT_USER'); ?>");
+                // TODO: check entered date
+                alert (msg.join('\n'));
+            }
 		}
 		
 		window.onload = init;
 		//-->
 		</script>
-		<form action="index2.php" method="post" name="adminForm">
-		
+		<form action="index.php" method="post" name="adminForm" id="adminForm" class="form-validate">
+		<input type="hidden" name="check" value="post"/>
 		<table class="adminheading">
 		<tr>
 			<th>
@@ -478,7 +506,7 @@ class HTML_awards {
 				</span>
 			</td>
 			<td align="left">
-				<input class="inputbox" type="text" name="date" size="10" maxlength="10" valign="top" value="<?php echo date( 'Y-m-d' ) ?>">
+				<input class="inputbox required" type="text" name="date" size="10" maxlength="10" valign="top" value="<?php echo date( 'Y-m-d' ) ?>">
 			</td>
 		</tr>
 		<tr>
@@ -545,7 +573,7 @@ class HTML_medals {
 
 		JHTML::_('behavior.tooltip');
 		?>
-		<form action="index2.php" method="post" name="adminForm">
+		<form action="index.php" method="post" name="adminForm" id="adminForm">
 		<table class="adminheading">
 		<tr>
 			<th>
@@ -584,7 +612,7 @@ class HTML_medals {
 				
 		  </tr>
 		<?php
-		$editLink="index2.php?option=com_jawards&amp;task=editmedalA&amp;hidemainmenu=1&amp;cid=";
+		$editLink="index.php?option=com_jawards&amp;task=editmedalA&amp;hidemainmenu=1&amp;cid=";
 		$k = 0;
 		for ($i=0, $n=count( $rows ); $i < $n; $i++) {
 			$row = &$rows[$i];
@@ -650,31 +678,45 @@ class HTML_medals {
 
 
 	function showUploadsForm($option){
-
         ?>
                 <script language="javascript">
                 <!--
-                function submitbutton(pressbutton) {
+                    window.addEvent('domready', function() {
+                        document.formvalidator.setHandler('imgfile',
+                        function (value) {
+                            regex=/\.jpg$|\.jpe$|\.jpeg$|\.gif$|\.png$/i;
+                            return regex.test(value);
+                        });
+                    });
+                    
+               Joomla.submitbutton = function(pressbutton) {
 
-                        var form = document.adminForm;
+                        var f = document.adminForm;
                         if (pressbutton == 'cancel') {
                                 submitform( pressbutton );
                                 return;
                         }
                         // do field validation
-                        var entered_filename = trim(document.adminForm.medal_file.value);
-                        searchextension = new RegExp('\.jpg$|\.jpe$|\.jpeg$|\.gif$|\.png$','ig');
-                        searchextensiontest = searchextension.test(entered_filename);
-                        if (entered_filename < 1) {
-                                alert( "<?php echo JText::_('AWARDS_ADM_ERROR_ENTER_FILE'); ?>" );
-                        } else if (searchextensiontest != true){
-                                alert("<?php echo JText::_('AWARDS_ADM_ERROR_WRONG_EXTENSION'); ?>");
- 
-                         }else {
-                                submitform( pressbutton );
+                        if (document.formvalidator.isValid(f)) {
+                            f.check.value='<?php echo JUtility::getToken(); ?>'; //send token
+                            submitform(pressbutton);    
                         }
+                        else {
+                            alert("<?php echo JText::_('AWARDS_ADM_ERROR_WRONG_EXTENSION'); ?>");
+                            }
+                            // TODO: differentiate error:
+//                         var entered_filename = trim(document.adminForm.medal_file.value);
+//                         searchextension = new RegExp('\.jpg$|\.jpe$|\.jpeg$|\.gif$|\.png$','ig');
+//                         searchextensiontest = searchextension.test(entered_filename);
+//                         if (entered_filename < 1) {
+//                                 alert( "<?php echo JText::_('AWARDS_ADM_ERROR_ENTER_FILE'); ?>" );
+//                         } else if (searchextensiontest != true){
+//                                 alert("<?php echo JText::_('AWARDS_ADM_ERROR_WRONG_EXTENSION'); ?>");
+//  
+//                          }else {
+//                                 submitform( pressbutton );
+//                         }
                 }
-                //-->
                 </script>
                 <table class="adminheading">
                 <tr>
@@ -683,7 +725,8 @@ class HTML_medals {
                         </th>
                 </tr>
                 </table>
-                <form action="index2.php" method="post" name="adminForm" enctype="multipart/form-data">
+                <form action="index.php" method="post" name="adminForm" id="adminForm" class="form-validate" enctype="multipart/form-data">
+                <input type="hidden" name="check" value="post"/>
                 <table class="adminform">
                 <tr>
                         <th colspan="2">
@@ -695,7 +738,7 @@ class HTML_medals {
                         <?php echo JText::_('AWARDS_ADM_FILE'); ?>:
                         </td>
                         <td>
-                               <input class="inputbox" type="file" name="medal_file" size="30" maxlength="60" valign="top" />
+                               <input class="inputbox required validate-imgfile" type="file" name="medal_file" size="30" maxlength="60" valign="top" />
 
                         </td>
                 </tr>
@@ -717,32 +760,44 @@ class HTML_medals {
 		<script language="javascript">
 		<!--
 		function changeDisplayImage() {
-			if (document.adminForm.image.value !='') {
+			if (document.adminForm.image.value !='0') {
 				document.adminForm.imagelib.src='../images/medals/' + document.adminForm.image.value;
 			} else {
 				document.adminForm.imagelib.src='images/blank.png';
 			}
-		}		
+		}
 		
-		function submitbutton(pressbutton) {
-			var form = document.adminForm;
+  window.addEvent('domready', function() {
+    document.formvalidator.setHandler('imglist',
+    function (value) {
+        return (value != '0')
+    });
+  });
+  		
+		Joomla.submitbutton = function(pressbutton) {
 			if (pressbutton == 'cancelmedal') {
 				submitform( pressbutton );
 				return;
 			}
-			// do field validation
-			if (form.name.value == "") {
-				alert( "<?php echo JText::_('AWARDS_ADM_ERROR_ENTER_MEDALNAME'); ?>" );
-			} else if (!getSelectedValue('adminForm','image')) {
-				alert( "<?php echo JText::_('AWARDS_ADM_ERROR_SELECT_IMAGE'); ?>" );
-			} else {
-				<?php 
-				$editor = &JFactory::getEditor();
-				echo $editor->save('desc_text');
-			
-				//getEditorContents('editor1', 'desc_text') ; ?>
-				submitform( pressbutton );
-			}
+			var f = document.adminForm;
+            if (document.formvalidator.isValid(f)) {
+                <?php 
+                $editor = &JFactory::getEditor();
+                echo $editor->save('desc_text');
+                ?>
+                f.check.value='<?php echo JUtility::getToken(); ?>'; //send token
+                submitform(pressbutton);    
+            } else {
+                var msg = new Array();
+                msg.push('<?php echo JText::_('AWARDS_ADM_ERROR_INVALID_INPUT')?>');
+                if ($('name').hasClass('invalid')) {
+                    msg.push('<?php echo JText::_('AWARDS_ADM_ERROR_ENTER_MEDALNAME')?>');    
+                }
+                if($('image').hasClass('invalid')){
+                    msg.push('<?php echo JText::_('AWARDS_ADM_ERROR_SELECT_IMAGE')?>');
+                }
+                alert (msg.join('\n'));
+            }
 		}
 		//-->
 		</script>
@@ -757,7 +812,8 @@ class HTML_medals {
 		</tr>
 		</table>
 		<p><?php echo JText::_('AWARDS_ADM_EDIT_MEDAL_EXPLANATION'); ?></p>
-		<form action="index2.php" method="post" name="adminForm">
+		<form action="index.php" method="post" name="adminForm" id="adminForm" class="form-validate">
+		<input type="hidden" name="check" value="post"/>
 		<table class="adminform">
 		<tr>
 			<th colspan="2">
@@ -769,7 +825,7 @@ class HTML_medals {
 			<?php echo JText::_('AWARDS_ADM_NAME'); ?>:
 			</td>
 			<td>
-				<input class="inputbox" type="text" name="name" size="30" maxlength="60" valign="top" value="<?php echo $row->name; ?>" />
+				<input class="inputbox required" type="text" name="name" id="name" size="30" maxlength="60" valign="top" value="<?php echo $row->name; ?>" />
 			</td>
 		</tr>
 		<tr>
@@ -781,8 +837,7 @@ class HTML_medals {
 			$editor =& JFactory::getEditor();
 			echo $editor->display('desc_text',  $row->desc_text, '400', '400', '20', '20', false);
 			   
-			//editorArea('editor1', $row->desc_text ,
-            //     'desc_text', '500', '200', '70', '10') ; ?> 
+            ?> 
 			</td>
 		</tr>
 		<tr>

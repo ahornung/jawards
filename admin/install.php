@@ -29,7 +29,7 @@ function com_install() {
   ?>
 	<center>
 <h2>Installation of jAwards, the awards-component for Joomla! 1.5</h2>
-    	<br /> Copyright 2007-2010, <a href="http://www.arminhornung.de/">Armin Hornung</a>
+    	<br /> Copyright 2007-2011, <a href="http://www.arminhornung.de/">Armin Hornung</a>
     	<br /> Released under GNU/GPL
     	<br /> More information at <a href="http://www.arminhornung.de/Joomla/jAwards_en.html">http://www.arminhornung.de/Joomla/jAwards_en.html</a> and <a href="http://joomlacode.org/gf/project/jawards/">http://joomlacode.org/gf/project/jawards/</a>.
     	<br />
