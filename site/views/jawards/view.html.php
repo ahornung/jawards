@@ -13,6 +13,8 @@ class JAwardsViewJAwards extends JView
     // Overwriting JView display method
     function display($tpl = null) 
     {
+        // default view: show medals
+        
         // Assign data to the view
         $this->msg = $this->get('Msg');
  

@@ -29,7 +29,7 @@
 	    <language tag="de-DE">de-DE.com_jawards.ini</language>
   </languages>
   
-<!-- TODO UNINSTALL -->
+<!-- TODO UNINSTALL SQL?-->
 
 	<install>
 		<sql>
@@ -42,7 +42,7 @@
   <administration>
 	  <menu img="components/com_jawards/images/medal_gold.png">COM_JAWARDS</menu>
 	  <submenu>
-		  <menu img="js/ThemeOffice/component.png" task="config">COM_JAWARDS_CONFIGURATION</menu>
+		  <menu img="class:config" task="config">COM_JAWARDS_CONFIGURATION</menu>
 		  <menu img="components/com_jawards/images/medal_gold.png" task="medals">COM_JAWARDS_MEDALS_MANAGEMENT</menu>
 		  <menu img="components/com_jawards/images/medal_silver.png" task="awards">COM_JAWARDS_AWARDS_MANAGEMENT</menu>
 	  </submenu> 
@@ -53,13 +53,9 @@
 		  <filename>toolbar.jawards.php</filename>
 		  <filename>toolbar.jawards.html.php</filename>
 		  <filename>index.html</filename>
-          <filename>images/index.html</filename>
-          <filename>images/license.txt</filename>
+          <folder>images</folder>
 	  </files>
-	  <images folder="admin">
-	  	  <filename>images/medal_gold.png</filename>
-		  <filename>images/medal_silver.png</filename>
-	  </images>
+
 	  <languages folder="admin/language">
 	    <language tag="en-GB">en-GB.com_jawards.ini</language>
 	    <language tag="en-GB">en-GB.com_jawards.sys.ini</language>

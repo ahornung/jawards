@@ -1,3 +1,5 @@
+<?php
+
 /*************************************************************
  * JAwards - The Joomla Awards Component
  * Author: Armin Hornung @  www.arminhornung.de
@@ -5,7 +7,6 @@
  * http://www.gnu.org/copyleft/gpl.html
  *************************************************************/
 
-<?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
  
@@ -16,7 +17,7 @@ jimport('joomla.application.component.controller');
 $controller = JController::getInstance('JAwards');
  
 // Perform the Request task
-$controller->execute(JRequest::getCmd('task'));
+$controller->execute(JRequest::getCmd('task', 'listmedals'));
  
 // Redirect if set by the controller
 $controller->redirect();

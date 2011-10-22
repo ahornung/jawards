@@ -17,9 +17,6 @@ jimport('joomla.application.component.modelitem');
  */
 class JAwardsModelJAwards extends JModelItem
 {
-    /**
-     * @var string msg
-     */
     protected $msg;
  
     /**
