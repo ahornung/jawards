@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-define('_JAWARDS_VERSION', "1.1");
+define('_JAWARDS_VERSION', "1.3");
 
 /**
  * Interface (API) to jAwards.

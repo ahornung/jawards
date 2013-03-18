@@ -23,7 +23,7 @@ class JAwardsController extends JController
         // TODO:  $jAwards_Config['number_awards']
         $limit = JRequest::getInt( 'limit',15);
         $limitstart = JRequest::getInt( 'limitstart', 0);
-        $option     = 'com_jawards';
+        $option = JRequest::getVar('option', 'com_jawards');
         
         $database = &JFactory::getDbo();
         

@@ -23,6 +23,7 @@ $showallusers = JRequest::getVar( 'showallusers', '');
 $cid = JRequest::getVar( 'cid', array(0) );
 $sortby = JRequest::getVar( 'sortby',"date");
 $task = JRequest::getVar( 'task', null);
+$option = JRequest::getVar('option', 'com_jawards');
 
 define('JA_JABSPATH',JPATH_ROOT);
 define('JA_MEDABSPATH',JA_JABSPATH.'/images/medals');
