@@ -9,8 +9,8 @@
   <license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
   <authorEmail>mail [at] arminhornung [dot] de</authorEmail>
   <authorUrl>http://www.arminhornung.de/Joomla/jAwards_en.html</authorUrl>
-  <version>1.3 beta1</version>
-  <description>This component manages medals and lets you hand out awards to your users. For more information, Readme and Changelog see the project homepage at the Joomlacode! jAwards was ported to Joomla 1.5 (native) with help by Cris Lehr.</description>
+  <version>1.3</version>
+  <description>This component manages medals and lets you hand out awards to your users. For more information, Readme and Changelog see the project homepage at Joomlacode! jAwards was ported to Joomla 1.5 (native) with help by Cris Lehr.</description>
   <params />
   
   <files folder="site">
